@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social X</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root {
+  --bg: #000;
+  --bg2: #16181c;
+  --bg3: #111;
+  --bg4: #1e2026;
+  --border: #2f3336;
+  --border2: #1a1a1a;
+  --text: #fff;
+  --text2: #e7e9ea;
+  --muted: #71767b;
+  --muted2: #536471;
+  --accent: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --accent-dark: #0e4d7a;
+  --like: #f91880;
+  --danger: #f4212e;
+  --bubble-mine: #1d9bf0;
+  --bubble-mine-text: #fff;
+  --bubble-theirs: #1e2026;
+  --bubble-theirs-text: #e7e9ea;
+  --post-hover: #080808;
+  --notif-unread: #0a1520;
+  --notif-unread-hover: #0d1a28;
+  --radius-card: 16px;
+  --font: 'Inter', Arial, sans-serif;
+}
+
+body.twitter-classic {
+  --bg: #e7ecef;
+  --bg2: #fff;
+  --bg3: #f7f9fa;
+  --bg4: #e8f5fe;
+  --border: #ccd6dd;
+  --border2: #e1e8ed;
+  --text: #14171a;
+  --text2: #14171a;
+  --muted: #657786;
+  --muted2: #8899a6;
+  --accent: #1da1f2;
+  --accent-hover: #0c85d0;
+  --accent-dark: #a8d8f5;
+  --like: #e0245e;
+  --danger: #e0245e;
+  --bubble-mine: #1da1f2;
+  --bubble-mine-text: #fff;
+  --bubble-theirs: #e8f5fe;
+  --bubble-theirs-text: #14171a;
+  --post-hover: #f5f8fa;
+  --notif-unread: #e8f5fe;
+  --notif-unread-hover: #d6eefb;
+  --radius-card: 6px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+.app {
+  max-width: 1400px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 260px 1fr 350px;
+  min-height: 100vh;
+}
+
+.sidebar-left {
+  padding: 20px;
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-wrap {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  height: 44px;
+}
+
+.logo-bird {
+  display: none;
+  width: 36px;
+  height: 36px;
+}
+body.twitter-classic .logo-bird { display: block; }
+body.twitter-classic .logo-x { display: none; }
+
+.logo-x {
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text);
+  display: block;
+  font-family: 'Georgia', serif;
+}
+
+.menu { flex: 1; }
+
+.menu button {
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 17px;
+  text-align: left;
+  border-radius: 999px;
+  cursor: pointer;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.15s, color 0.15s;
+  font-family: var(--font);
+  position: relative;
+}
+.menu button:hover { background: var(--bg3); }
+.menu button.active { font-weight: 700; }
+
+body.twitter-classic .menu button:hover { background: #e8f5fe; }
+body.twitter-classic .menu button.active { color: var(--accent); }
+
+.menu-badge {
+  background: var(--danger);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  min-width: 18px;
+  text-align: center;
+  display: none;
+  margin-left: auto;
+}
+.menu-badge.show { display: inline-block; }
+
+/* ====================================================
+   BOTÃO DE TEMA — círculo compacto
+   ==================================================== */
+.theme-toggle-btn {
+  margin-top: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.theme-toggle-btn:hover {
+  background: var(--bg4);
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+
+.theme-btn-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-btn-icon svg { width: 22px; height: 22px; }
+
+/* esconde label de texto — só ícone agora */
+.theme-btn-label { display: none !important; }
+
+body.twitter-classic .sidebar-left {
+  background: #fff;
+  border-right: 1px solid var(--border);
+}
+body.twitter-classic .feed {
+  background: #fff;
+  border-right: 1px solid var(--border);
+}
+body.twitter-classic .feed-top {
+  background: rgba(255,255,255,0.95);
+  border-bottom: 1px solid var(--border);
+}
+body.twitter-classic .create-post {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+body.twitter-classic .profile-box {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+body.twitter-classic .post {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+body.twitter-classic .post:hover { background: #f5f8fa; }
+body.twitter-classic .post-btn {
+  background: var(--accent);
+  font-weight: 800;
+}
+body.twitter-classic .action-btn:hover {
+  color: var(--accent);
+  background: rgba(29,161,242,0.1);
+}
+body.twitter-classic .sidebar-right {
+  background: #f5f8fa;
+}
+body.twitter-classic .box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+body.twitter-classic .follow-btn {
+  background: var(--text);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+}
+body.twitter-classic .follow-btn.following {
+  background: transparent;
+  border: 1px solid var(--muted2);
+  color: var(--text);
+}
+body.twitter-classic .theme-toggle-btn {
+  background: #fff;
+  border: 1px solid var(--border);
+}
+body.twitter-classic .comments {
+  border-top: 1px solid var(--border);
+}
+body.twitter-classic .comment-input input {
+  background: #f5f8fa;
+  border: 1px solid var(--border);
+}
+body.twitter-classic #notificationsSection {
+  background: #fff;
+  border-right: 1px solid var(--border);
+}
+body.twitter-classic .notif-top {
+  background: rgba(255,255,255,0.95);
+}
+body.twitter-classic #messagesSection {
+  background: #fff;
+}
+body.twitter-classic #convList {
+  background: #fff;
+  border-right: 1px solid var(--border);
+}
+body.twitter-classic .conv-header {
+  background: #fff;
+}
+body.twitter-classic .chat-header {
+  background: #fff;
+}
+body.twitter-classic .chat-input-area {
+  background: #fff;
+}
+body.twitter-classic .msg-row.theirs .msg-bubble {
+  background: #e8f5fe;
+  color: #14171a;
+}
+body.twitter-classic #chatArea {
+  background: #fff;
+}
+body.twitter-classic #chatOpen {
+  background: #fff;
+}
+
+.feed { border-right: 1px solid var(--border); background: var(--bg); transition: background 0.3s, border-color 0.3s; }
+.feed-top {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+  transition: border-color 0.3s;
+}
+
+.profile-box {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #222; }
+.avatar-lg { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #222; }
+
+.create-post {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+.create-post-inner { display: flex; gap: 12px; }
+.create-post textarea {
+  flex: 1;
+  min-height: 80px;
+  background: none;
+  border: none;
+  outline: none;
+  resize: none;
+  color: var(--text);
+  font-size: 19px;
+  font-family: var(--font);
+  padding-top: 4px;
+}
+.create-post textarea::placeholder { color: var(--muted2); }
+.create-post-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+.char-count { color: var(--muted2); font-size: 14px; margin-right: 16px; }
+.char-count.warn { color: #ffd400; }
+.char-count.over { color: var(--danger); }
+.post-btn {
+  background: var(--accent);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: background 0.15s;
+  font-family: var(--font);
+}
+.post-btn:hover { background: var(--accent-hover); }
+.post-btn:disabled { background: var(--accent-dark); cursor: not-allowed; opacity: 0.6; }
+
+.post {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s, border-color 0.3s;
+  background: var(--bg);
+}
+.post:hover { background: var(--post-hover); }
+.post-top { display: flex; gap: 12px; }
+.post-info { flex: 1; min-width: 0; }
+.post-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.post-header-left { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.post-name { font-weight: 700; font-size: 15px; }
+.post-username { color: var(--muted); font-size: 15px; }
+.post-time { color: var(--muted); font-size: 13px; }
+.post-text { margin-top: 10px; line-height: 1.6; font-size: 16px; color: var(--text2); word-break: break-word; }
+
+.actions { display: flex; align-items: center; gap: 2px; max-width: 420px; margin-top: 14px; }
+.action-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.action-btn:hover { color: var(--accent); background: rgba(29,155,240,0.1); }
+.action-btn.liked { color: var(--like); }
+.action-btn.liked:hover { background: rgba(249,24,128,0.1); color: var(--like); }
+
+.toggle-comments-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.toggle-comments-btn:hover { color: var(--accent); background: rgba(29,155,240,0.1); }
+
+.post-menu-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 20px;
+  line-height: 1;
+  transition: all 0.15s;
+  font-family: var(--font);
+  letter-spacing: 1px;
+}
+.post-menu-btn:hover { color: var(--text); background: var(--bg3); }
+
+.inline-follow-btn {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  font-family: var(--font);
+  margin-left: 4px;
+}
+.inline-follow-btn:hover { opacity: 0.85; }
+.inline-follow-btn.following { background: transparent; border: 1px solid var(--muted2); color: var(--text); }
+.inline-follow-btn.following:hover { background: rgba(244,33,46,0.1); border-color: var(--danger); color: var(--danger); }
+
+.comments {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border2);
+}
+.comments-list {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+}
+.comments-list.open {
+  display: flex;
+}
+.comment { padding: 8px 0; border-bottom: 1px solid var(--border2); font-size: 14px; display: flex; gap: 8px; }
+.comment:last-child { border-bottom: none; }
+.comment-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #222; }
+.comment-body { flex: 1; min-width: 0; }
+.comment-header { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.comment-name { font-weight: 600; font-size: 13px; }
+.comment-username { color: var(--muted); font-size: 13px; }
+.comment-text { margin-top: 3px; color: var(--muted); line-height: 1.4; word-break: break-word; }
+.comment-input { display: flex; gap: 10px; margin-top: 12px; align-items: center; }
+.comment-input input {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  font-family: var(--font);
+  transition: border-color 0.15s;
+}
+.comment-input input:focus { border-color: var(--accent); }
+.comment-input button {
+  background: var(--accent);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s;
+  font-family: var(--font);
+}
+.comment-input button:hover { background: var(--accent-hover); }
+
+.sidebar-right {
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg);
+  transition: background 0.3s;
+}
+.box {
+  background: var(--bg2);
+  padding: 18px;
+  border-radius: var(--radius-card);
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  transition: background 0.3s, border-color 0.3s;
+}
+.box h2 { font-size: 20px; margin-bottom: 14px; font-weight: 800; }
+
+body.twitter-classic .box h2 { font-size: 19px; font-weight: 800; color: #14171a; }
+
+.trending-item { padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
+.trending-item:last-child { border-bottom: none; }
+.trending-item:hover { background: var(--bg3); margin: 0 -18px; padding: 10px 18px; border-radius: 4px; }
+.trending-label { font-size: 12px; color: var(--muted); }
+.trending-tag { font-weight: 700; font-size: 15px; }
+.trending-count { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.users-search-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+.users-search-wrap input {
+  width: 100%;
+  padding: 9px 14px 9px 36px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  font-family: var(--font);
+  transition: border-color 0.15s;
+}
+.users-search-wrap input:focus { border-color: var(--accent); }
+.users-search-wrap input::placeholder { color: var(--muted2); }
+.users-search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.users-list-wrap {
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.users-list-wrap::-webkit-scrollbar { width: 4px; }
+.users-list-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.user-card { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.user-card:last-child { border-bottom: none; }
+.follow-btn {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  font-family: var(--font);
+}
+.follow-btn:hover { opacity: 0.85; }
+.follow-btn.following { background: transparent; border: 1px solid var(--muted2); color: var(--text); }
+.follow-btn.following:hover { background: rgba(244,33,46,0.1); border-color: var(--danger); color: var(--danger); }
+
+#notificationsSection {
+  display: none;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+#notificationsSection.active { display: flex; }
+
+.notif-top {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+}
+.notif-top h2 { font-size: 20px; font-weight: 700; }
+.notif-list { flex: 1; overflow-y: auto; }
+
+.notif-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border2);
+  transition: background 0.15s;
+  animation: slideIn 0.25s ease;
+  cursor: pointer;
+}
+.notif-item:hover { background: var(--post-hover); }
+.notif-item.unread { background: var(--notif-unread); }
+.notif-item.unread:hover { background: var(--notif-unread-hover); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notif-icon { font-size: 20px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #222; }
+.notif-body { flex: 1; min-width: 0; }
+.notif-text { font-size: 15px; line-height: 1.4; color: var(--text); }
+.notif-text strong { color: var(--text); }
+.notif-time { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+.notif-follow-back {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  font-family: var(--font);
+  white-space: nowrap;
+  margin-left: auto;
+}
+.notif-follow-back:hover { opacity: 0.85; }
+.notif-follow-back.following { background: transparent; border: 1px solid var(--muted2); color: var(--text); }
+.notif-follow-back.following:hover { background: rgba(244,33,46,0.1); border-color: var(--danger); color: var(--danger); }
+.notif-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); display: flex; justify-content: center; align-items: center; z-index: 999; }
+.modal.hidden { display: none; }
+.modal-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 36px;
+  border-radius: 20px;
+  width: 420px;
+  max-width: 95vw;
+}
+.modal-logo { font-size: 40px; text-align: center; margin-bottom: 20px; }
+.modal-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.modal-subtitle { color: var(--muted); font-size: 15px; margin-bottom: 22px; }
+.modal-tabs { display: flex; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+.modal-tab {
+  flex: 1; padding: 12px; background: none; border: none;
+  color: var(--muted); cursor: pointer;
+  font-size: 15px; font-weight: 600; border-bottom: 2px solid transparent;
+  transition: all 0.15s; font-family: var(--font);
+}
+.modal-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.modal-content input {
+  width: 100%; padding: 14px 16px; margin-bottom: 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); font-size: 16px;
+  outline: none; font-family: var(--font); transition: border-color 0.15s;
+}
+.modal-content input:focus { border-color: var(--accent); }
+.primary-btn {
+  width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff;
+  border-radius: 999px; cursor: pointer; font-size: 16px; font-weight: 700; margin-top: 4px;
+  transition: background 0.15s; font-family: var(--font);
+}
+.primary-btn:hover { background: var(--accent-hover); }
+.primary-btn:disabled { background: var(--accent-dark); cursor: not-allowed; }
+.error-msg {
+  background: rgba(244,33,46,0.12); border: 1px solid var(--danger); color: var(--danger);
+  padding: 10px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 14px; display: none;
+}
+
+.confirm-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.confirm-modal.hidden { display: none; }
+.confirm-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; padding: 28px; width: 320px; max-width: 90vw; text-align: center; }
+.confirm-box h3 { font-size: 20px; margin-bottom: 10px; color: var(--text); }
+.confirm-box p { color: var(--muted); font-size: 15px; margin-bottom: 24px; }
+.confirm-actions { display: flex; gap: 12px; }
+.confirm-actions button { flex: 1; padding: 12px; border-radius: 999px; border: none; cursor: pointer; font-size: 15px; font-weight: 700; font-family: var(--font); transition: all 0.15s; }
+.btn-cancel { background: transparent; border: 1px solid var(--muted2) !important; color: var(--text); }
+.btn-cancel:hover { background: var(--bg3); }
+.btn-delete { background: var(--danger); color: #fff; }
+.btn-delete:hover { filter: brightness(0.85); }
+
+.toast {
+  position: fixed; bottom: 80px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--accent); color: #fff; padding: 12px 24px; border-radius: 999px;
+  font-size: 15px; font-weight: 600; opacity: 0; transition: all 0.3s;
+  z-index: 9999; pointer-events: none; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.loading { text-align: center; padding: 40px; color: var(--muted2); }
+.spinner {
+  width: 28px; height: 28px; border: 3px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-state { padding: 60px 20px; text-align: center; color: var(--muted2); }
+.empty-state h3 { font-size: 22px; color: var(--text); margin-bottom: 8px; }
+
+/* ============================================================
+   MENSAGENS — CORREÇÃO DO BUG DE LAYOUT
+   ============================================================ */
+#messagesSection {
+  display: none;
+  border-right: 1px solid var(--border);
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+#messagesSection.active { display: flex; flex-direction: row; }
+
+#convList {
+  width: 360px;
+  min-width: 300px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+.conv-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.conv-header h2 { font-size: 20px; font-weight: 700; }
+.conv-search {
+  padding: 10px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  font-family: var(--font);
+  width: calc(100% - 32px);
+  margin: 10px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.conv-search:focus { border-color: var(--accent); }
+.conv-search::placeholder { color: var(--muted2); }
+.conv-scroll { flex: 1; overflow-y: auto; }
+
+.conv-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border2);
+  transition: background 0.15s;
+  position: relative;
+}
+.conv-item:hover { background: var(--post-hover); }
+.conv-item.active-conv { background: var(--bg3); }
+.conv-item img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #222; }
+.conv-item-info { flex: 1; min-width: 0; }
+.conv-item-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.conv-item-name { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.conv-item-time { font-size: 12px; color: var(--muted2); flex-shrink: 0; }
+.conv-item-preview { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+
+#chatArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  min-width: 0;
+  background: var(--bg);
+  transition: background 0.3s;
+}
+
+#chatNoConv {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted2);
+  text-align: center;
+  padding: 40px;
+}
+#chatNoConv .dm-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+#chatNoConv h3 { font-size: 22px; color: var(--text); margin-bottom: 8px; }
+#chatNoConv p { font-size: 15px; line-height: 1.6; max-width: 320px; color: var(--muted); }
+
+#chatOpen {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  transition: background 0.3s;
+}
+#chatOpen.visible { display: flex; }
+
+.chat-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  flex-shrink: 0;
+  transition: background 0.3s, border-color 0.3s;
+}
+.chat-header-back {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 999px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.chat-header-back:hover { background: var(--bg3); }
+.chat-header-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #222; cursor: pointer; }
+.chat-header-info { flex: 1; min-width: 0; }
+.chat-header-name { font-weight: 700; font-size: 16px; color: var(--text); }
+.chat-header-username { color: var(--muted); font-size: 13px; }
+.chat-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.chat-action-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 20px;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.chat-action-btn:hover { color: var(--text); background: var(--bg3); }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 20px 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scroll-behavior: smooth;
+  /* garante que o flex container não quebre o layout dos filhos */
+  min-height: 0;
+}
+
+.msg-date-sep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 8px;
+  flex-shrink: 0;
+}
+.msg-date-sep span {
+  font-size: 12px;
+  color: var(--muted2);
+  background: var(--bg);
+  padding: 0 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.msg-date-sep::before, .msg-date-sep::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border2);
+}
+
+/* ---- Linhas de mensagem ---- */
+.msg-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+  /* CRÍTICO: impede que o flex-item expanda além do container */
+  min-width: 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+.msg-row.mine  { flex-direction: row-reverse; }
+.msg-row.theirs { flex-direction: row; }
+
+.msg-sender-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #222;
+  align-self: flex-end;
+}
+.msg-sender-avatar.hidden { visibility: hidden; }
+
+/* ---- Coluna de bubble + timestamp ---- */
+.msg-col {
+  /* limita largura e garante quebra de linha correta */
+  max-width: 65%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* alinhamento: minha msg à direita, dele à esquerda */
+}
+.msg-row.mine  .msg-col { align-items: flex-end; }
+.msg-row.theirs .msg-col { align-items: flex-start; }
+
+/* ---- Bubble ---- */
+.msg-bubble {
+  /* CRÍTICO: estas 3 propriedades juntas resolvem o bug */
+  display: inline-block;
+  max-width: 100%;
+  word-wrap: break-word;       /* quebra palavras longas se necessário */
+  overflow-wrap: break-word;   /* alias moderno */
+  word-break: normal;          /* NÃO quebra palavras no meio — respeita espaços */
+  white-space: pre-wrap;       /* mantém espaços, quebra linhas normalmente */
+  padding: 10px 14px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.msg-row.mine .msg-bubble {
+  background: var(--bubble-mine);
+  color: var(--bubble-mine-text);
+  border-radius: 20px 20px 4px 20px;
+}
+.msg-row.theirs .msg-bubble {
+  background: var(--bubble-theirs);
+  color: var(--bubble-theirs-text);
+  border-radius: 20px 20px 20px 4px;
+}
+
+.msg-time-tooltip {
+  font-size: 11px;
+  color: var(--muted2);
+  text-align: center;
+  margin-top: 2px;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+.chat-input-area {
+  padding: 12px 16px 16px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+  background: var(--bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+.chat-input-emoji {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.chat-input-emoji:hover { transform: scale(1.2); }
+.chat-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 8px 16px;
+  gap: 8px;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+.chat-input-wrapper:focus-within { border-color: var(--accent); }
+#chatInput {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 15px;
+  font-family: var(--font);
+  resize: none;
+  max-height: 120px;
+  overflow-y: auto;
+  line-height: 1.5;
+  min-width: 0;
+}
+#chatInput::placeholder { color: var(--muted2); }
+.chat-input-media {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.chat-input-media:hover { color: var(--accent); }
+.chat-send-btn {
+  background: var(--accent);
+  border: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.chat-send-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
+.chat-send-btn:disabled { background: var(--accent-dark); cursor: not-allowed; transform: none; }
+
+@media(max-width: 1100px) {
+  .app { grid-template-columns: 72px 1fr 0; }
+  .sidebar-right { display: none; }
+  .sidebar-left { padding: 12px 8px; }
+  .menu button span.menu-label { display: none; }
+  #convList { width: 280px; min-width: 240px; }
+}
+
+@media(max-width: 700px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .sidebar-left { display: none; }
+  .sidebar-right { display: none; }
+
+  .feed { border-right: none; padding-bottom: 70px; min-height: 100vh; min-height: 100dvh; }
+
+  #notificationsSection {
+    padding-bottom: 70px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    border-right: none;
+  }
+
+  #messagesSection {
+    height: 100vh;
+    height: 100dvh;
+    border-right: none;
+    position: relative;
+  }
+  #messagesSection.active { flex-direction: column; }
+
+  #convList {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    height: calc(100vh - 70px);
+    height: calc(100dvh - 70px);
+  }
+  #convList.hidden-mobile { display: none !important; }
+
+  #chatArea {
+    position: absolute;
+    inset: 0;
+    bottom: 70px;
+    z-index: 50;
+    background: var(--bg);
+    height: auto;
+  }
+  #chatArea.chat-hidden { display: none !important; }
+
+  .mobile-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.96);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  body.twitter-classic .mobile-nav { background: rgba(255,255,255,0.97); border-top: 1px solid var(--border); }
+
+  .mobile-nav-btn {
+    flex: 1; background: none; border: none; color: var(--muted); font-size: 22px;
+    padding: 12px 0; cursor: pointer; display: flex; flex-direction: column;
+    align-items: center; gap: 2px; font-family: var(--font);
+    transition: color 0.15s; position: relative;
+  }
+  .mobile-nav-btn.active { color: var(--accent); }
+  .mobile-nav-btn .nav-label { font-size: 10px; font-weight: 600; }
+
+  .mobile-badge {
+    position: absolute; top: 6px; right: calc(50% - 20px);
+    background: var(--danger); color: #fff; border-radius: 999px;
+    font-size: 10px; font-weight: 700; padding: 1px 5px;
+    min-width: 16px; text-align: center; display: none;
+  }
+  .mobile-badge.show { display: block; }
+
+  .toast { bottom: 80px; }
+  .feed.hidden-mobile { display: none; }
+  #notificationsSection.hidden-mobile { display: none !important; }
+  #messagesSection.hidden-mobile { display: none !important; }
+}
+
+.mobile-nav { display: none; }
+@media(max-width: 700px) { .mobile-nav { display: flex; } }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
+
+/* Google button and LGPD styles */
+.google-btn-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px;
+}
+.google-signin-btn {
+  width: 100%; padding: 13px 20px; background: #fff; border: 1px solid #dadce0;
+  border-radius: 999px; cursor: pointer; font-size: 15px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  color: #3c4043; transition: box-shadow 0.2s; font-family: var(--font);
+}
+.google-signin-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+.google-signin-btn img { width: 20px; height: 20px; }
+.lgpd-notice {
+  font-size: 12px; color: var(--muted2); text-align: center; line-height: 1.6; margin-top: 14px;
+}
+.lgpd-notice a { color: var(--accent); cursor: pointer; text-decoration: underline; }
+.lgpd-modal { position:fixed;inset:0;background:rgba(0,0,0,.88);display:flex;
+  justify-content:center;align-items:center;z-index:1100; }
+.lgpd-modal.hidden { display:none; }
+.lgpd-box { background:var(--bg);border:1px solid var(--border);border-radius:16px;
+  padding:28px;width:480px;max-width:95vw;max-height:80vh;overflow-y:auto; }
+.lgpd-box h2 { font-size:20px;margin-bottom:14px; }
+.lgpd-box p,.lgpd-box li { color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:8px; }
+.lgpd-box ul { padding-left:20px; }
+.delete-zone { margin-top:28px;padding-top:20px;border-top:1px solid var(--border); }
+.delete-zone h3 { font-size:16px;margin-bottom:8px;color:var(--danger); }
+.delete-zone p { font-size:13px;color:var(--muted2); }
+</style>
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-logo">𝕏</div>
+    <h2 class="modal-title">Entre no Social X</h2>
+    <p class="modal-subtitle">Acesso exclusivo via conta Google.</p>
+    <div id="errorMsg" class="error-msg"></div>
+    <div class="google-btn-wrap">
+      <button class="google-signin-btn" onclick="triggerGoogleLogin()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Entrar com Google
+      </button>
+    </div>
+    <div class="lgpd-notice">
+      Ao entrar, você concorda com nossos
+      <a onclick="openLgpd()">Termos e Política de Privacidade (LGPD)</a>.<br>
+      Seus dados são usados somente para operar este serviço.
+    </div>
+  </div>
+</div>
+
+<!-- Modal LGPD / Política de Privacidade -->
+<div id="lgpdModal" class="lgpd-modal hidden">
+  <div class="lgpd-box">
+    <h2>🔒 Política de Privacidade</h2>
+    <p>Em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>, informamos:</p>
+    <ul>
+      <li><strong>Dados coletados:</strong> nome, e-mail e foto de perfil da conta Google.</li>
+      <li><strong>Finalidade:</strong> identificação e personalização do serviço Social X.</li>
+      <li><strong>Compartilhamento:</strong> nenhum dado é vendido ou compartilhado com terceiros.</li>
+      <li><strong>Armazenamento:</strong> dados ficam em planilha Google Sheets controlada pelo operador do serviço.</li>
+      <li><strong>Direitos:</strong> você pode acessar, corrigir ou excluir seus dados a qualquer momento nas configurações abaixo.</li>
+      <li><strong>Contato DPO:</strong> responsavel@seudominio.com</li>
+    </ul>
+    <div class="delete-zone" id="deleteZone" style="display:none;">
+      <h3>⚠️ Excluir minha conta</h3>
+      <p>Remove todos os seus posts, comentários, mensagens e dados de perfil permanentemente.</p>
+      <button class="primary-btn" style="background:var(--danger);margin-top:12px;"
+              onclick="deleteMyAccount()">Excluir minha conta e dados</button>
+    </div>
+    <button class="primary-btn" style="margin-top:20px;" onclick="closeLgpd()">Fechar</button>
+  </div>
+</div>
+
+<div id="confirmModal" class="confirm-modal hidden">
+  <div class="confirm-box">
+    <h3>Excluir post?</h3>
+    <p>Essa ação não pode ser desfeita.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-delete" id="confirmDeleteBtn">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<div class="app">
+  <aside class="sidebar-left">
+    <div class="logo-wrap">
+      <svg class="logo-bird" viewBox="0 0 24 24" fill="#1da1f2" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"/>
+      </svg>
+      <span class="logo-x">𝕏</span>
+    </div>
+
+    <div class="menu">
+      <button class="active" id="menuHome" onclick="showSection('home')">🏠 <span class="menu-label">Home</span></button>
+      <button id="menuNotif" onclick="showSection('notifications')">
+        🔔 <span class="menu-label">Notificações</span>
+        <span class="menu-badge" id="notifBadgeDesktop"></span>
+      </button>
+      <button id="menuMessages" onclick="showSection('messages')">✉️ <span class="menu-label">Mensagens</span></button>
+      <button onclick="openLgpd()">🔒 <span class="menu-label">Privacidade</span></button>
+      <button onclick="logout()">🚪 <span class="menu-label">Sair</span></button>
+    </div>
+
+    <!-- Botão redondo de tema -->
+    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="Alternar tema">
+      <span class="theme-btn-icon" id="themeBtnIcon">
+        <!-- Pássaro Twitter (visível no modo X → clica para ir ao Twitter) -->
+        <svg id="iconBird" viewBox="0 0 24 24" fill="#1da1f2" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"/>
+        </svg>
+        <!-- 𝕏 (visível no modo Twitter → clica para voltar ao X) -->
+        <span id="iconX" style="font-size:20px;font-weight:900;font-family:Georgia,serif;color:var(--text);display:none;">𝕏</span>
+      </span>
+      <span class="theme-btn-label"></span>
+    </button>
+  </aside>
+
+  <main class="feed" id="feedSection">
+    <div class="feed-top">
+      <h2 style="font-size:20px;font-weight:700;">Página Inicial</h2>
+    </div>
+    <div class="profile-box">
+      <img id="profileAvatar" class="avatar-lg"
+           src="https://i.pravatar.cc/150?img=1"
+           alt="" title="Clique para trocar foto"
+           style="cursor:pointer;"
+           onclick="openImagePicker()">
+      <div style="flex:1;">
+        <h2 id="profileName" style="font-size:18px;font-weight:700;">—</h2>
+        <div id="profileUsername" style="color:var(--muted);font-size:15px;"></div>
+        <div id="profileStats" style="margin-top:8px;color:var(--muted);font-size:14px;"></div>
+      </div>
+    </div>
+    <div class="create-post">
+      <div class="create-post-inner">
+        <img id="createAvatar" class="avatar" src="https://i.pravatar.cc/150?img=1" alt="">
+        <textarea id="postText" placeholder="O que está acontecendo?" maxlength="280"
+                  oninput="updateCharCount()"></textarea>
+      </div>
+      <div class="create-post-actions">
+        <span id="charCount" class="char-count">280</span>
+        <button class="post-btn" id="postBtn" onclick="createPost()" disabled>Postar</button>
+      </div>
+    </div>
+    <div id="feed">
+      <div class="loading"><div class="spinner"></div>Carregando posts...</div>
+    </div>
+  </main>
+
+  <section id="notificationsSection">
+    <div class="notif-top">
+      <h2>Notificações</h2>
+    </div>
+    <div class="notif-list" id="notifList">
+      <div class="loading"><div class="spinner"></div>Carregando...</div>
+    </div>
+  </section>
+
+  <section id="messagesSection">
+    <div id="convList">
+      <div class="conv-header">
+        <h2 style="flex:1;">Mensagens</h2>
+      </div>
+      <div style="padding:8px 12px 4px;">
+        <input class="conv-search" id="convSearch" placeholder="🔍  Pesquisar mensagens" oninput="filterConvs()">
+      </div>
+      <div class="conv-scroll" id="convScroll">
+        <div class="loading"><div class="spinner"></div>Carregando...</div>
+      </div>
+    </div>
+
+    <div id="chatArea">
+      <div id="chatNoConv">
+        <div class="dm-icon">✉️</div>
+        <h3>Suas mensagens</h3>
+        <p>Selecione uma conversa para começar a conversar com quem você segue mutuamente.</p>
+      </div>
+
+      <div id="chatOpen">
+        <div class="chat-header">
+          <button class="chat-header-back" onclick="closeChatMobile()" title="Voltar">←</button>
+          <img class="chat-header-avatar" id="chatPartnerAvatar" src="https://i.pravatar.cc/150?img=1" alt="">
+          <div class="chat-header-info">
+            <div class="chat-header-name" id="chatPartnerName"></div>
+            <div class="chat-header-username" id="chatPartnerUsername"></div>
+          </div>
+          <div class="chat-header-actions">
+            <button class="chat-action-btn" title="Informações" onclick="showToast('Em breve! ℹ️')">ℹ️</button>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <div class="chat-input-area">
+          <button class="chat-input-emoji" title="Emoji" onclick="showToast('Emojis em breve! 😄')">😊</button>
+          <div class="chat-input-wrapper">
+            <input id="chatInput" placeholder="Mensagem..." maxlength="500"
+                   onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}">
+            <button class="chat-input-media" title="Mídia" onclick="showToast('Em breve! 🚀')">📷</button>
+          </div>
+          <button class="chat-send-btn" onclick="sendMessage()" id="chatSendBtn" title="Enviar">➤</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="sidebar-right" id="sidebarRight">
+    <div class="box">
+      <h2>Tendências para você</h2>
+      <div class="trending-item">
+        <div class="trending-label">Tecnologia · Tendência</div>
+        <div class="trending-tag">#InteligenciaArtificial</div>
+        <div class="trending-count">48,2 mil posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-label">Programação · Tendência</div>
+        <div class="trending-tag">#JavaScript</div>
+        <div class="trending-count">32,5 mil posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-label">Brasil · Tendência</div>
+        <div class="trending-tag">#TechBrasil</div>
+        <div class="trending-count">19,1 mil posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-label">Ciência · Tendência</div>
+        <div class="trending-tag">#OpenAI</div>
+        <div class="trending-count">14,7 mil posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-label">Dev · Tendência</div>
+        <div class="trending-tag">#Python</div>
+        <div class="trending-count">11,3 mil posts</div>
+      </div>
+    </div>
+    <div class="box">
+      <h2>Quem seguir</h2>
+      <div class="users-search-wrap">
+        <span class="users-search-icon">🔍</span>
+        <input type="text" id="usersSearchInput" placeholder="Buscar @username..." oninput="filterUsers()">
+      </div>
+      <div class="users-list-wrap" id="usersList">
+        <div class="loading" style="padding:16px 0;">Carregando...</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<nav class="mobile-nav">
+  <button class="mobile-nav-btn active" id="mobileHome" onclick="showSection('home')">
+    🏠 <span class="nav-label">Home</span>
+  </button>
+  <button class="mobile-nav-btn" id="mobileNotif" onclick="showSection('notifications')">
+    🔔 <span class="nav-label">Notificações</span>
+    <span class="mobile-badge" id="notifBadgeMobile"></span>
+  </button>
+  <button class="mobile-nav-btn" id="mobileMsgs" onclick="showSection('messages')">
+    ✉️ <span class="nav-label">Mensagens</span>
+  </button>
+  <button class="mobile-nav-btn" onclick="toggleTheme()" style="position:relative;">
+    <span id="mobileThemeIcon">🐦</span>
+    <span class="nav-label">Tema</span>
+  </button>
+</nav>
+
+<script>
+// ══════════════════════════════════════════════════════
+// CONFIG — troque pelo URL do seu Apps Script publicado
+// ══════════════════════════════════════════════════════
+const API_URL = 'https://script.google.com/macros/s/AKfycbw7A71YYr6nwWkjGxa_tESN88q9BQ7DBzr_aUznUONbgt3Vp-8koyQFFAdGoa8ZT4c/exec';
+// Troque pelo Client ID do Google Cloud Console
+const GOOGLE_CLIENT_ID = '910398696014-gdde3nmj5u3aj3tru69elha6tlvcfn7k.apps.googleusercontent.com';
+
+// ══════════════════════════════════════════════════════
+// SEGURANÇA — Filtro de fórmulas (CSV/Formula Injection)
+// Impede que qualquer texto comece com = + - @ TAB CR
+// ══════════════════════════════════════════════════════
+function sanitize(value) {
+  if (typeof value !== 'string') return value;
+  // Remove fórmulas de planilha
+  const formulaChars = ['=', '+', '-', '@', '\t', '\r', '\n'];
+  let s = value.trim();
+  while (s.length && formulaChars.includes(s[0])) s = s.slice(1).trim();
+  // Escapa HTML para exibição segura
+  return s;
+}
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+// ══════════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════════════
+let currentUser = null, followingSet = new Set();
+let feedInterval = null, msgInterval = null, notifInterval = null;
+let lastPostIds = [], lastPostsMap = {}, pendingDeleteId = null;
+let currentSection = 'home', mutualFollows = [], activeConvUser = null;
+let conversations = {}, notifData = [], isTwitterMode = false;
+let allUsersCache = [], readNotifIds = new Set(), msgNotifCache = [];
+
+// ══════════════════════════════════════════════════════
+// GOOGLE OAUTH
+// ══════════════════════════════════════════════════════
+function triggerGoogleLogin() {
+  // Abre o popup de seleção de conta Google
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    ux_mode: 'popup'
+  });
+  google.accounts.id.prompt();
+}
+
+async function handleGoogleCredential(response) {
+  clearError();
+  if (!response.credential) return showError('Falha na autenticação Google.');
+  const btn = document.querySelector('.google-signin-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'googleLogin', credential: response.credential })
+    });
+    const data = await res.json();
+    if (data.success) {
+      applyLoggedIn(data.user);
+      showToast(`Bem-vindo, ${data.user.name}! 👋`);
+    } else {
+      showError(data.message || 'Erro ao autenticar.');
+    }
+  } catch(e) {
+    showError('Erro de conexão. Tente novamente.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = ''; btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:20px;height:20px;" alt="G"> Entrar com Google'; }
+  }
+}
+
+function logout() {
+  stopFeedInterval(); stopMsgInterval(); stopNotifInterval();
+  // Revoga sessão Google
+  if (typeof google !== 'undefined' && google.accounts)
+    google.accounts.id.revoke(currentUser?.email || '', () => {});
+  localStorage.removeItem('currentUser');
+  location.reload();
+}
+
+// ══════════════════════════════════════════════════════
+// LGPD
+// ══════════════════════════════════════════════════════
+function openLgpd() {
+  const dz = document.getElementById('deleteZone');
+  if (dz) dz.style.display = currentUser ? '' : 'none';
+  document.getElementById('lgpdModal').classList.remove('hidden');
+}
+function closeLgpd() { document.getElementById('lgpdModal').classList.add('hidden'); }
+
+async function deleteMyAccount() {
+  if (!currentUser) return;
+  if (!confirm('Tem certeza? Todos os seus dados serão apagados permanentemente.')) return;
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'deleteAccount', userId: currentUser.id })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Conta excluída. Até logo!');
+      setTimeout(() => { localStorage.removeItem('currentUser'); location.reload(); }, 1800);
+    } else {
+      showToast(data.message || 'Erro ao excluir conta.', '#f4212e');
+    }
+  } catch(e) { showToast('Erro de conexão.', '#f4212e'); }
+}
+
+// ══════════════════════════════════════════════════════
+// UPLOAD DE IMAGEM → GOOGLE DRIVE
+// ══════════════════════════════════════════════════════
+function openImagePicker() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return showToast('Imagem muito grande (máx 5MB)', '#f4212e');
+    showToast('Enviando imagem... ⏳');
+    const base64 = await fileToBase64(file);
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          action: 'uploadImage',
+          userId: currentUser.id,
+          imageBase64: base64.split(',')[1], // remove "data:image/...;base64,"
+          mimeType: file.type,
+          fileName: file.name
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Atualiza avatar do usuário
+        currentUser.avatar = data.url;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        document.getElementById('profileAvatar').src = data.url;
+        document.getElementById('createAvatar').src  = data.url;
+        showToast('Foto atualizada! 🖼️');
+      } else {
+        showToast(data.message || 'Erro no upload.', '#f4212e');
+      }
+    } catch(e) { showToast('Erro de conexão.', '#f4212e'); }
+  };
+  input.click();
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = () => res(r.result);
+    r.onerror = () => rej(new Error('Erro ao ler arquivo'));
+    r.readAsDataURL(file);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// AUTH LOCAL
+// ══════════════════════════════════════════════════════
+function applyLoggedIn(user) {
+  currentUser = user;
+  localStorage.setItem('currentUser', JSON.stringify(user));
+  try {
+    const saved = localStorage.getItem('readNotifIds_' + user.id);
+    readNotifIds = saved ? new Set(JSON.parse(saved)) : new Set();
+  } catch(e) { readNotifIds = new Set(); }
+  document.getElementById('authModal').classList.add('hidden');
+  loadProfile(); loadUsers();
+  lastPostIds = []; lastPostsMap = {};
+  document.getElementById('feed').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando posts...</div>';
+  loadFeed(); startFeedInterval(); startNotifInterval();
+}
+
+function checkLogin() {
+  const savedTheme = localStorage.getItem('twitterMode');
+  isTwitterMode = savedTheme === '1';
+  applyTheme();
+  try {
+    const saved = localStorage.getItem('currentUser');
+    if (saved) {
+      const user = JSON.parse(saved);
+      if (user && user.id) { applyLoggedIn(user); return; }
+    }
+  } catch(e) {}
+  localStorage.removeItem('currentUser');
+}
+
+function showError(msg) { const el=document.getElementById('errorMsg'); el.textContent=msg; el.style.display='block'; }
+function clearError()   { document.getElementById('errorMsg').style.display='none'; }
+
+function toggleTheme() {
+  isTwitterMode = !isTwitterMode;
+  applyTheme();
+  localStorage.setItem('twitterMode', isTwitterMode ? '1' : '0');
+}
+
+function applyTheme() {
+  const iconBird    = document.getElementById('iconBird');
+  const iconX       = document.getElementById('iconX');
+  const mobileTheme = document.getElementById('mobileThemeIcon');
+
+  if (isTwitterMode) {
+    document.body.classList.add('twitter-classic');
+    // No modo Twitter: mostrar 𝕏 (para voltar ao X)
+    if (iconBird) iconBird.style.display = 'none';
+    if (iconX)    iconX.style.display    = 'inline';
+    if (mobileTheme) mobileTheme.textContent = '𝕏';
+    document.title = 'Twitter | Página Inicial';
+  } else {
+    document.body.classList.remove('twitter-classic');
+    // No modo X: mostrar pássaro (para ir ao Twitter)
+    if (iconBird) iconBird.style.display = 'block';
+    if (iconX)    iconX.style.display    = 'none';
+    if (mobileTheme) mobileTheme.textContent = '🐦';
+    document.title = 'Social X';
+  }
+}
+
+function showSection(section) {
+  currentSection = section;
+  const feedEl   = document.getElementById('feedSection');
+  const notifEl  = document.getElementById('notificationsSection');
+  const msgsEl   = document.getElementById('messagesSection');
+  const sidebarR = document.getElementById('sidebarRight');
+
+  feedEl.classList.add('hidden-mobile');
+  notifEl.classList.add('hidden-mobile');
+  msgsEl.classList.add('hidden-mobile');
+  notifEl.classList.remove('active');
+  msgsEl.classList.remove('active');
+
+  ['menuHome','menuNotif','menuMessages'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+  ['mobileHome','mobileNotif','mobileMsgs'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+
+  if (sidebarR) {
+    sidebarR.style.visibility   = section === 'home' ? '' : 'hidden';
+    sidebarR.style.pointerEvents = section === 'home' ? '' : 'none';
+  }
+
+  if (section === 'home') {
+    feedEl.classList.remove('hidden-mobile');
+    document.getElementById('menuHome')?.classList.add('active');
+    document.getElementById('mobileHome')?.classList.add('active');
+  } else if (section === 'notifications') {
+    notifEl.classList.remove('hidden-mobile');
+    notifEl.classList.add('active');
+    document.getElementById('menuNotif')?.classList.add('active');
+    document.getElementById('mobileNotif')?.classList.add('active');
+    loadNotifications();
+  } else if (section === 'messages') {
+    msgsEl.classList.remove('hidden-mobile');
+    msgsEl.classList.add('active');
+    document.getElementById('menuMessages')?.classList.add('active');
+    document.getElementById('mobileMsgs')?.classList.add('active');
+    if (!mutualFollows.length) loadConversations();
+    else renderConvList();
+    if (!msgInterval) startMsgInterval();
+  }
+}
+
+function showToast(msg, color) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || 'var(--accent)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function avatarFallback(url, seed) {
+  if (url && url.startsWith('http')) return url;
+  const n = seed ? ((seed.charCodeAt(0) % 70) + 1) : 1;
+  return `https://i.pravatar.cc/150?img=${n}`;
+}
+
+function formatTime(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return '';
+  const diff = Math.floor((Date.now() - d) / 1000);
+  if (diff < 60)    return `${diff}s`;
+  if (diff < 3600)  return `${Math.floor(diff/60)}min`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h`;
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
+}
+
+function formatFullTime(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return '';
+  return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function formatDateLabel(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return '';
+  const today     = new Date();
+  const yesterday = new Date(today); yesterday.setDate(today.getDate()-1);
+  if (d.toDateString() === today.toDateString())     return 'Hoje';
+  if (d.toDateString() === yesterday.toDateString()) return 'Ontem';
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+}
+
+function updateCharCount() {
+  const text = document.getElementById('postText').value;
+  const rem  = 280 - text.length;
+  const el   = document.getElementById('charCount');
+  el.textContent = rem;
+  el.className   = 'char-count'+(rem<20?' warn':'')+(rem<0?' over':'');
+  document.getElementById('postBtn').disabled = !text.trim() || rem < 0;
+}
+
+function isMobile() { return window.innerWidth <= 700; }
+
+// ══════════════════════════════════════════════════════
+// CRIAR POST — com sanitização
+// ══════════════════════════════════════════════════════
+async function createPost() {
+  if (!currentUser) return;
+  const raw  = document.getElementById('postText').value.trim();
+  const text = sanitize(raw); // ← aplica filtro de fórmulas
+  if (!text || text.length > 280) return;
+  const btn = document.getElementById('postBtn');
+  btn.disabled = true; btn.textContent = 'Postando...';
+  try {
+    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action:'createPost', userId: currentUser.id, text }) });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('postText').value = ''; updateCharCount();
+      showToast('Post publicado! ✅');
+      lastPostIds = []; lastPostsMap = {};
+      await loadFeed(); loadProfile();
+    } else showToast('Erro ao publicar.','#f4212e');
+  } catch(e) { showToast('Erro de conexão.','#f4212e'); }
+  finally { btn.disabled = false; btn.textContent = 'Postar'; }
+}
+
+async function loadProfile() {
+  if (!currentUser) return;
+  try {
+    const res     = await fetch(`${API_URL}?action=getProfile&userId=${encodeURIComponent(currentUser.id)}`);
+    const profile = await res.json();
+    if (profile.error) return;
+    const av = avatarFallback(profile.avatar, profile.id);
+    document.getElementById('profileAvatar').src = av;
+    document.getElementById('createAvatar').src  = av;
+    document.getElementById('profileName').textContent     = profile.name;
+    document.getElementById('profileUsername').textContent = profile.username;
+    document.getElementById('profileStats').innerHTML =
+      `<strong>${profile.followers}</strong> seguidores &nbsp;·&nbsp; `+
+      `<strong>${profile.following}</strong> seguindo &nbsp;·&nbsp; `+
+      `<strong>${profile.posts}</strong> posts`;
+    currentUser = {...currentUser,...profile};
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  } catch(e) {}
+}
+
+function askDeletePost(postId) {
+  pendingDeleteId=postId;
+  document.getElementById('confirmModal').classList.remove('hidden');
+  document.getElementById('confirmDeleteBtn').onclick=confirmDelete;
+}
+function closeConfirm() {
+  pendingDeleteId=null;
+  document.getElementById('confirmModal').classList.add('hidden');
+}
+async function confirmDelete() {
+  if (!pendingDeleteId||!currentUser) return;
+  const postId=pendingDeleteId; closeConfirm();
+  try {
+    const res  = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deletePost',postId,userId:currentUser.id})});
+    const data = await res.json();
+    if (data.success) {
+      showToast('Post excluído.');
+      const el=document.getElementById('post_'+postId);
+      if (el) { el.style.opacity='0'; el.style.transition='opacity 0.3s'; setTimeout(()=>el.remove(),350); }
+      lastPostIds=lastPostIds.filter(id=>id!==postId);
+      delete lastPostsMap[postId];
+      loadProfile();
+    } else showToast(data.message||'Erro ao excluir.','#f4212e');
+  } catch(e) { showToast('Erro de conexão.','#f4212e'); }
+}
+
+async function likePost(postId,btn) {
+  if (!currentUser||btn.disabled) return;
+  btn.disabled=true;
+  try {
+    const res  = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'likePost',postId,userId:currentUser.id})});
+    const data = await res.json();
+    if (data.success||data.alreadyLiked) {
+      btn.classList.add('liked');
+      if (data.success) { const s=btn.querySelector('.like-count'); if(s) s.textContent=parseInt(s.textContent||0)+1; }
+    }
+  } catch(e) {}
+  finally { btn.disabled=false; }
+}
+
+// ══════════════════════════════════════════════════════
+// COMENTAR — com sanitização
+// ══════════════════════════════════════════════════════
+async function commentPost(postId) {
+  if (!currentUser) return;
+  const input = document.getElementById('comment_' + postId);
+  if (!input) return;
+  const text = sanitize(input.value.trim());
+  if (!text) return;
+  const sendBtn = input.nextElementSibling;
+  input.disabled = true; if(sendBtn) sendBtn.disabled = true;
+  try {
+    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action:'commentPost', postId, userId: currentUser.id, text }) });
+    const data = await res.json();
+    if (data.success) {
+      input.value = ''; showToast('Comentário enviado!');
+      injectComment(postId, { name: currentUser.name, username: currentUser.username, avatar: currentUser.avatar, text });
+      const s = document.querySelector(`#post_${postId} .comment-count`);
+      if(s) s.textContent = parseInt(s.textContent||0) + 1;
+      const list = document.querySelector(`#post_${postId} .comments-list`);
+      if(list) list.classList.add('open');
+    } else showToast('Erro ao comentar.','#f4212e');
+  } catch(e) { showToast('Erro de conexão.','#f4212e'); }
+  finally { input.disabled = false; if(sendBtn) sendBtn.disabled = false; input.focus(); }
+}
+
+function injectComment(postId,c) {
+  const list=document.querySelector(`#post_${postId} .comments-list`);
+  if (!list) return;
+  const av=avatarFallback(c.avatar,c.username||'');
+  const div=document.createElement('div');
+  div.className='comment';
+  div.innerHTML=`<img class="comment-avatar" src="${av}" alt=""><div class="comment-body"><div class="comment-header"><span class="comment-name">${escapeHtml(c.name)}</span><span class="comment-username">${escapeHtml(c.username)}</span></div><div class="comment-text">${escapeHtml(c.text)}</div></div>`;
+  list.appendChild(div);
+}
+
+function toggleComments(postId) {
+  const list = document.querySelector(`#post_${postId} .comments-list`);
+  const btn  = document.querySelector(`#post_${postId} .toggle-comments-btn`);
+  if (!list) return;
+  const isOpen = list.classList.toggle('open');
+  if (btn) {
+    const count = btn.dataset.count || '0';
+    btn.innerHTML = isOpen
+      ? `💬 <span class="comment-count">${count}</span> ▲`
+      : `💬 <span class="comment-count">${count}</span>`;
+  }
+}
+
+async function followUser(userId,btn) {
+  if (!currentUser||btn.disabled) return;
+  const isFollowing=followingSet.has(userId);
+  btn.disabled=true;
+  try {
+    const res  = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:isFollowing?'unfollowUser':'followUser',followerId:currentUser.id,followingId:userId})});
+    const data = await res.json();
+    if (data.success) {
+      if (isFollowing) { followingSet.delete(userId); btn.textContent='Seguir'; btn.classList.remove('following'); }
+      else { followingSet.add(userId); btn.textContent='Seguindo'; btn.classList.add('following'); showToast('Você começou a seguir! 👤'); }
+      document.querySelectorAll(`.inline-follow-btn[data-uid="${userId}"]`).forEach(b=>{
+        if(isFollowing){b.textContent='Seguir';b.classList.remove('following');}
+        else{b.textContent='Seguindo';b.classList.add('following');}
+      });
+      document.querySelectorAll(`.notif-follow-back[data-uid="${userId}"]`).forEach(b=>{
+        if(isFollowing){b.textContent='Seguir de volta';b.classList.remove('following');}
+        else{b.textContent='Seguindo';b.classList.add('following');}
+      });
+      loadProfile();
+      if (currentSection==='messages') { mutualFollows=[]; loadConversations(); }
+    }
+  } catch(e) {}
+  finally { btn.disabled=false; }
+}
+
+async function loadUsers() {
+  if (!currentUser) return;
+  try {
+    const [usersRes,followRes] = await Promise.all([
+      fetch(`${API_URL}?action=getUsers`),
+      fetch(`${API_URL}?action=getFollowing&userId=${encodeURIComponent(currentUser.id)}`)
+    ]);
+    const usersData  = await usersRes.json();
+    const followData = await followRes.json();
+    followingSet = new Set(followData.following||[]);
+    allUsersCache = (usersData.users||[]).filter(u=>u.id!==currentUser.id);
+    renderUsersList(allUsersCache);
+  } catch(e) {
+    document.getElementById('usersList').innerHTML='<div style="color:var(--muted2);font-size:13px;">Erro ao carregar usuários.</div>';
+  }
+}
+
+function renderUsersList(users) {
+  const list=document.getElementById('usersList');
+  list.innerHTML='';
+  if (!users.length) {
+    list.innerHTML='<div style="color:var(--muted2);font-size:14px;padding:8px 0;">Nenhum usuário encontrado.</div>';
+    return;
+  }
+  users.forEach(user=>{
+    const isF=followingSet.has(user.id);
+    const av=avatarFallback(user.avatar,user.id);
+    const div=document.createElement('div');
+    div.className='user-card';
+    div.innerHTML=`<div style="display:flex;gap:10px;align-items:center;flex:1;min-width:0;"><img src="${av}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#222;"><div style="min-width:0;"><strong style="font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);">${escapeHtml(user.name)}</strong><span style="color:var(--muted);font-size:13px;">${escapeHtml(user.username)}</span><br><small style="color:var(--muted2);font-size:12px;">${user.followers} seguidores</small></div></div>`;
+    const btn=document.createElement('button');
+    btn.className='follow-btn'+(isF?' following':'');
+    btn.textContent=isF?'Seguindo':'Seguir';
+    btn.onclick=()=>followUser(user.id,btn);
+    div.appendChild(btn);
+    list.appendChild(div);
+  });
+}
+
+function filterUsers() {
+  const q = (document.getElementById('usersSearchInput').value||'').toLowerCase().replace('@','');
+  if (!q) { renderUsersList(allUsersCache); return; }
+  const filtered = allUsersCache.filter(u =>
+    u.name.toLowerCase().includes(q) ||
+    (u.username||'').toLowerCase().replace('@','').includes(q)
+  );
+  renderUsersList(filtered);
+}
+
+async function loadFeed() {
+  if (!currentUser) return;
+  try {
+    const res   = await fetch(`${API_URL}?action=getFeed`);
+    const data  = await res.json();
+    const posts = data.posts||[];
+    const feedEl= document.getElementById('feed');
+    const isFirstLoad = !!(feedEl.querySelector('.loading')||feedEl.querySelector('.empty-state'));
+
+    if (isFirstLoad) {
+      feedEl.innerHTML='';
+      if (!posts.length) {
+        feedEl.innerHTML='<div class="empty-state"><h3>Seja o primeiro a postar!</h3><p>Compartilhe o que está acontecendo.</p></div>';
+        lastPostIds=[]; lastPostsMap={}; return;
+      }
+      posts.forEach(p=>feedEl.appendChild(buildPostEl(p)));
+      lastPostIds=posts.map(p=>p.id);
+      lastPostsMap=Object.fromEntries(posts.map(p=>[p.id,p]));
+      return;
+    }
+
+    const newIds=posts.map(p=>p.id);
+    const newSet=new Set(newIds);
+    lastPostIds.forEach(id=>{ if(!newSet.has(id)){ const el=document.getElementById('post_'+id); if(el) el.remove(); delete lastPostsMap[id]; } });
+    const existingSet=new Set(lastPostIds);
+    const toAdd=posts.filter(p=>!existingSet.has(p.id));
+    [...toAdd].reverse().forEach(p=>{ const el=buildPostEl(p); feedEl.insertBefore(el,feedEl.firstChild); });
+    posts.forEach(p=>{
+      const el=document.getElementById('post_'+p.id);
+      if(!el) return;
+      const old=lastPostsMap[p.id];
+      if(!old||old.likes!==p.likes){ const s=el.querySelector('.like-count'); if(s) s.textContent=p.likes||0; }
+      if(!old||old.comments!==p.comments){
+        const s=el.querySelector('.comment-count'); if(s) s.textContent=p.comments||0;
+        const btn=el.querySelector('.toggle-comments-btn'); if(btn) btn.dataset.count=p.comments||0;
+      }
+    });
+    lastPostIds=newIds;
+    lastPostsMap=Object.fromEntries(posts.map(p=>[p.id,p]));
+  } catch(e) {
+    const feedEl=document.getElementById('feed');
+    if(feedEl.querySelector('.loading')) feedEl.innerHTML='<div class="empty-state"><h3>Erro de conexão</h3><p>Verifique a URL do Apps Script.</p></div>';
+  }
+}
+
+function buildPostEl(post) {
+  const isOwner  = post.userId===currentUser.id;
+  const isLiked  = (post.likedBy||[]).includes(currentUser.id);
+  const isFollow = followingSet.has(post.userId);
+  const av       = avatarFallback(post.avatar,post.userId||post.id);
+  const myAv     = avatarFallback(currentUser.avatar,currentUser.id);
+  const commentCount = post.comments||0;
+
+  let commentsHTML='';
+  (post.commentsList||[]).forEach(c=>{
+    const cav=avatarFallback(c.avatar,c.userId||'');
+    commentsHTML+=`<div class="comment"><img class="comment-avatar" src="${cav}" alt=""><div class="comment-body"><div class="comment-header"><span class="comment-name">${escapeHtml(c.name)}</span><span class="comment-username">${escapeHtml(c.username)}</span></div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`;
+  });
+
+  const followBtnHtml = !isOwner
+    ? `<button class="inline-follow-btn ${isFollow?'following':''}" data-uid="${post.userId}" onclick="event.stopPropagation();followUser('${post.userId}',this)">${isFollow?'Seguindo':'Seguir'}</button>`
+    : '';
+
+  const wrapper=document.createElement('div');
+  wrapper.className='post';
+  wrapper.id='post_'+post.id;
+  wrapper.innerHTML=`
+    <div class="post-top">
+      <img class="avatar" src="${av}" alt="">
+      <div class="post-info">
+        <div class="post-header">
+          <div class="post-header-left">
+            <span class="post-name">${escapeHtml(post.name)}</span>
+            <span class="post-username">${escapeHtml(post.username)}</span>
+            ${followBtnHtml}
+            <span class="post-time" style="margin-left:4px;">${formatTime(post.createdAt)}</span>
+          </div>
+          ${isOwner?`<button class="post-menu-btn" title="Excluir post" onclick="askDeletePost('${post.id}')">···</button>`:''}
+        </div>
+        <div class="post-text">${escapeHtml(post.text)}</div>
+        <div class="actions">
+          <button class="action-btn ${isLiked?'liked':''}" onclick="likePost('${post.id}',this)">❤️ <span class="like-count">${post.likes||0}</span></button>
+          <button class="toggle-comments-btn" data-count="${commentCount}" onclick="toggleComments('${post.id}')">💬 <span class="comment-count">${commentCount}</span></button>
+          <button class="action-btn">🔁 <span>${post.reposts||0}</span></button>
+        </div>
+        <div class="comments">
+          <div class="comments-list">${commentsHTML}</div>
+          <div class="comment-input">
+            <img class="comment-avatar" src="${myAv}" alt="">
+            <input id="comment_${post.id}" placeholder="Responder..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();commentPost('${post.id}')}">
+            <button onclick="commentPost('${post.id}')">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  return wrapper;
+}
+
+function startFeedInterval() { stopFeedInterval(); feedInterval=setInterval(loadFeed,20000); }
+function stopFeedInterval()  { if(feedInterval){clearInterval(feedInterval);feedInterval=null;} }
+
+function saveReadNotifs() {
+  if (!currentUser) return;
+  localStorage.setItem('readNotifIds_' + currentUser.id, JSON.stringify([...readNotifIds]));
+}
+
+async function loadNotifications() {
+  if (!currentUser) return;
+  const listEl=document.getElementById('notifList');
+  listEl.innerHTML='<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  try {
+    const [usersRes,followRes] = await Promise.all([
+      fetch(`${API_URL}?action=getUsers`),
+      fetch(`${API_URL}?action=getFollowing&userId=${encodeURIComponent(currentUser.id)}`)
+    ]);
+    const usersData  = await usersRes.json();
+    const followData = await followRes.json();
+    const allUsers   = usersData.users||[];
+    const iFollow    = new Set(followData.following||[]);
+    followingSet     = iFollow;
+    const others     = allUsers.filter(u=>u.id!==currentUser.id);
+
+    const followerItems = [];
+    const followChecks  = others.map(async u=>{
+      try {
+        const r=await fetch(`${API_URL}?action=getFollowing&userId=${encodeURIComponent(u.id)}`);
+        const d=await r.json();
+        if ((d.following||[]).includes(currentUser.id)) {
+          followerItems.push({
+            type: 'follow',
+            id: 'follow_' + u.id,
+            fromUserId:   u.id,
+            fromName:     u.name,
+            fromUsername: u.username,
+            avatar:       u.avatar,
+            createdAt:    u.createdAt || new Date(0).toISOString()
+          });
+        }
+      } catch(e){}
+    });
+    await Promise.all(followChecks);
+    followerItems.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+
+    const msgNotifs = [];
+    for (const user of mutualFollows) {
+      const msgs = conversations[user.id]||[];
+      const unreadMsgs = msgs.filter(m => m.senderId !== currentUser.id);
+      if (unreadMsgs.length > 0) {
+        const lastMsg = unreadMsgs[unreadMsgs.length-1];
+        const notifId = 'msg_' + user.id + '_' + lastMsg.id;
+        msgNotifs.push({
+          type: 'message',
+          id: notifId,
+          fromUserId:   user.id,
+          fromName:     user.name,
+          fromUsername: user.username,
+          avatar:       user.avatar,
+          preview:      lastMsg.text,
+          createdAt:    lastMsg.createdAt
+        });
+      }
+    }
+
+    notifData = [...msgNotifs, ...followerItems];
+    notifData.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+    notifData.forEach(n => readNotifIds.add(n.id));
+    saveReadNotifs();
+    renderNotifications(notifData);
+    updateNotifBadge(0);
+  } catch(e) {
+    listEl.innerHTML='<div class="empty-state"><h3>Erro ao carregar notificações</h3></div>';
+  }
+}
+
+function renderNotifications(notifs) {
+  const listEl=document.getElementById('notifList');
+  listEl.innerHTML='';
+  if (!notifs.length) {
+    listEl.innerHTML=`<div class="empty-state"><div style="font-size:42px;margin-bottom:12px;">🔔</div><h3>Sem notificações</h3><p>Quando alguém te seguir ou te enviar mensagem, aparecerá aqui.</p></div>`;
+    return;
+  }
+  notifs.forEach(n=>{
+    const av=avatarFallback(n.avatar,n.fromUserId);
+    const isRead=readNotifIds.has(n.id);
+    const item=document.createElement('div');
+    item.className='notif-item'+(!isRead?' unread':'');
+    if (n.type === 'follow') {
+      const isAlreadyFollowing=followingSet.has(n.fromUserId);
+      item.innerHTML=`
+        ${!isRead?'<div class="notif-unread-dot"></div>':'<div style="width:8px;flex-shrink:0;"></div>'}
+        <div class="notif-icon">👤</div>
+        <img class="notif-avatar" src="${av}" alt="">
+        <div class="notif-body">
+          <div class="notif-text"><strong>${escapeHtml(n.fromName)}</strong> <span style="color:var(--muted);">@${escapeHtml(n.fromUsername||'')}</span> começou a te seguir</div>
+          <div class="notif-time">${formatTime(n.createdAt)}</div>
+        </div>
+        <button class="notif-follow-back ${isAlreadyFollowing?'following':''}" data-uid="${n.fromUserId}" onclick="followUser('${n.fromUserId}',this)">${isAlreadyFollowing?'Seguindo':'Seguir de volta'}</button>`;
+    } else if (n.type === 'message') {
+      item.onclick = () => {
+        const u = mutualFollows.find(x => x.id === n.fromUserId);
+        if (u) { showSection('messages'); setTimeout(()=>openChat(u), 100); }
+      };
+      item.innerHTML=`
+        ${!isRead?'<div class="notif-unread-dot"></div>':'<div style="width:8px;flex-shrink:0;"></div>'}
+        <div class="notif-icon">✉️</div>
+        <img class="notif-avatar" src="${av}" alt="">
+        <div class="notif-body">
+          <div class="notif-text"><strong>${escapeHtml(n.fromName)}</strong> <span style="color:var(--muted);">@${escapeHtml(n.fromUsername||'')}</span> te enviou uma mensagem</div>
+          <div class="notif-time" style="color:var(--muted2);margin-top:2px;">"${escapeHtml((n.preview||'').slice(0,60))}"</div>
+          <div class="notif-time">${formatTime(n.createdAt)}</div>
+        </div>`;
+    }
+    listEl.appendChild(item);
+  });
+}
+
+function countUnreadNotifs() {
+  return notifData.filter(n => !readNotifIds.has(n.id)).length;
+}
+
+function updateNotifBadge(count) {
+  const d=document.getElementById('notifBadgeDesktop');
+  const m=document.getElementById('notifBadgeMobile');
+  if (count>0) {
+    const label=count>99?'99+':String(count);
+    if(d){d.textContent=label;d.classList.add('show');}
+    if(m){m.textContent=label;m.classList.add('show');}
+  } else {
+    if(d){d.textContent='';d.classList.remove('show');}
+    if(m){m.textContent='';m.classList.remove('show');}
+  }
+}
+
+async function checkNotifsBadge() {
+  if (!currentUser) return;
+  try {
+    const [usersRes] = await Promise.all([fetch(`${API_URL}?action=getUsers`)]);
+    const usersData  = await usersRes.json();
+    const allUsers   = usersData.users||[];
+    const others     = allUsers.filter(u=>u.id!==currentUser.id);
+    const followerItems = [];
+    const followChecks  = others.map(async u=>{
+      try {
+        const r=await fetch(`${API_URL}?action=getFollowing&userId=${encodeURIComponent(u.id)}`);
+        const d=await r.json();
+        if ((d.following||[]).includes(currentUser.id)) followerItems.push({ id: 'follow_' + u.id });
+      } catch(e){}
+    });
+    await Promise.all(followChecks);
+    const msgNotifIds = [];
+    for (const user of mutualFollows) {
+      const msgs = conversations[user.id]||[];
+      const unreadMsgs = msgs.filter(m => m.senderId !== currentUser.id);
+      if (unreadMsgs.length > 0) {
+        const lastMsg = unreadMsgs[unreadMsgs.length-1];
+        msgNotifIds.push({ id: 'msg_' + user.id + '_' + lastMsg.id });
+      }
+    }
+    const allIds = [...followerItems, ...msgNotifIds];
+    const unread = allIds.filter(n => !readNotifIds.has(n.id)).length;
+    updateNotifBadge(unread);
+  } catch(e) {}
+}
+
+function startNotifInterval() {
+  stopNotifInterval();
+  notifInterval=setInterval(()=>{
+    if(currentSection==='notifications') loadNotifications();
+    else checkNotifsBadge();
+  },20000);
+}
+function stopNotifInterval() { if(notifInterval){clearInterval(notifInterval);notifInterval=null;} }
+
+async function loadConversations() {
+  if (!currentUser) return;
+  const scrollEl=document.getElementById('convScroll');
+  scrollEl.innerHTML='<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  try {
+    const res  = await fetch(`${API_URL}?action=getMutualFollows&userId=${encodeURIComponent(currentUser.id)}`);
+    const data = await res.json();
+    mutualFollows = data.users||[];
+    await Promise.all(mutualFollows.map(u=>fetchMessages(u.id,false,true)));
+    renderConvList();
+    if (!msgInterval) startMsgInterval();
+  } catch(e) {
+    document.getElementById('convScroll').innerHTML=`<div style="color:var(--muted);padding:20px;text-align:center;">Erro ao carregar.<br><button onclick="loadConversations()" style="margin-top:12px;background:var(--accent);color:white;border:none;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:inherit;">Tentar novamente</button></div>`;
+  }
+}
+
+function filterConvs() {
+  const q = (document.getElementById('convSearch').value||'').toLowerCase();
+  document.querySelectorAll('.conv-item').forEach(el=>{
+    const name = el.querySelector('.conv-item-name')?.textContent?.toLowerCase()||'';
+    el.style.display = (!q || name.includes(q)) ? '' : 'none';
+  });
+}
+
+function renderConvList() {
+  const scrollEl=document.getElementById('convScroll');
+  scrollEl.innerHTML='';
+  if (!mutualFollows.length) {
+    scrollEl.innerHTML=`<div style="padding:40px 20px;text-align:center;color:var(--muted);"><div style="font-size:48px;margin-bottom:16px;">👥</div><p style="font-size:15px;line-height:1.6;">Siga alguém que também te segue de volta para começar uma conversa.</p></div>`;
+    return;
+  }
+  const sorted = [...mutualFollows].sort((a,b)=>{
+    const msgsA = conversations[a.id]||[];
+    const msgsB = conversations[b.id]||[];
+    const lastA = msgsA[msgsA.length-1];
+    const lastB = msgsB[msgsB.length-1];
+    if (!lastA && !lastB) return 0;
+    if (!lastA) return 1;
+    if (!lastB) return -1;
+    return new Date(lastB.createdAt)-new Date(lastA.createdAt);
+  });
+  sorted.forEach(user=>{
+    const av   = avatarFallback(user.avatar,user.id);
+    const msgs = conversations[user.id]||[];
+    const last = msgs[msgs.length-1];
+    const preview = last
+      ? (last.senderId===currentUser.id ? `Você: ${last.text}` : last.text)
+      : 'Diga olá! 👋';
+    const timeStr = last ? formatTime(last.createdAt) : '';
+    const div=document.createElement('div');
+    div.className='conv-item'+(activeConvUser&&activeConvUser.id===user.id?' active-conv':'');
+    div.id='conv_'+user.id;
+    div.onclick=()=>openChat(user);
+    div.innerHTML=`
+      <img src="${av}" alt="">
+      <div class="conv-item-info">
+        <div class="conv-item-top">
+          <span class="conv-item-name">${escapeHtml(user.name)}</span>
+          <span class="conv-item-time">${escapeHtml(timeStr)}</span>
+        </div>
+        <div class="conv-item-preview">${escapeHtml(preview)}</div>
+      </div>`;
+    scrollEl.appendChild(div);
+  });
+}
+
+async function openChat(user) {
+  activeConvUser = user;
+  document.querySelectorAll('.conv-item').forEach(el=>el.classList.remove('active-conv'));
+  const ci=document.getElementById('conv_'+user.id);
+  if(ci) ci.classList.add('active-conv');
+  document.getElementById('chatNoConv').style.display='none';
+  document.getElementById('chatOpen').classList.add('visible');
+  if (!isMobile()) {
+    document.getElementById('convList').style.display = 'none';
+    document.getElementById('chatArea').style.flex = '1';
+  }
+  if (isMobile()) {
+    document.getElementById('convList').classList.add('hidden-mobile');
+  }
+  const av=avatarFallback(user.avatar,user.id);
+  document.getElementById('chatPartnerAvatar').src=av;
+  document.getElementById('chatPartnerName').textContent=user.name;
+  document.getElementById('chatPartnerUsername').textContent=user.username;
+  await fetchMessages(user.id,true,false);
+  document.getElementById('chatInput').focus();
+}
+
+function closeChatMobile() {
+  activeConvUser=null;
+  document.getElementById('chatNoConv').style.display='';
+  document.getElementById('chatOpen').classList.remove('visible');
+  if (!isMobile()) {
+    document.getElementById('convList').style.display='';
+    document.getElementById('chatArea').style.flex='';
+  }
+  if (isMobile()) {
+    document.getElementById('convList').classList.remove('hidden-mobile');
+  }
+  document.querySelectorAll('.conv-item').forEach(el=>el.classList.remove('active-conv'));
+}
+
+async function fetchMessages(partnerId, scrollToBottom=false, silent=false) {
+  if (!currentUser) return;
+  try {
+    const res  = await fetch(`${API_URL}?action=getMessages&userId=${encodeURIComponent(currentUser.id)}&partnerId=${encodeURIComponent(partnerId)}`);
+    const data = await res.json();
+    const msgs = data.messages||[];
+    conversations[partnerId]=msgs;
+    if (activeConvUser&&activeConvUser.id===partnerId) {
+      renderMessages(msgs,scrollToBottom);
+    }
+    if (!silent) renderConvList();
+  } catch(e) {}
+}
+
+function renderMessages(msgs, scrollToBottom) {
+  const container=document.getElementById('chatMessages');
+  if (!container) return;
+  container.innerHTML='';
+
+  if (!msgs.length) {
+    container.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--muted2);text-align:center;padding:40px;min-height:200px;"><span style="font-size:40px;margin-bottom:12px;">👋</span><p style="font-size:15px;">Nenhuma mensagem ainda. Diga olá!</p></div>`;
+    return;
+  }
+
+  let lastDateLabel='';
+
+  msgs.forEach((msg,i)=>{
+    const isMine  = msg.senderId===currentUser.id;
+    const side    = isMine ? 'mine' : 'theirs';
+    const prevMsg = i>0 ? msgs[i-1] : null;
+    const nextMsg = i<msgs.length-1 ? msgs[i+1] : null;
+
+    const dateLabel = formatDateLabel(msg.createdAt);
+    if (dateLabel !== lastDateLabel) {
+      lastDateLabel = dateLabel;
+      const sep=document.createElement('div');
+      sep.className='msg-date-sep';
+      sep.innerHTML=`<span>${dateLabel}</span>`;
+      container.appendChild(sep);
+    }
+
+    const samePrev = prevMsg && prevMsg.senderId===msg.senderId;
+    const sameNext = nextMsg && nextMsg.senderId===msg.senderId;
+    const partnerAv = activeConvUser ? avatarFallback(activeConvUser.avatar,activeConvUser.id) : '';
+
+    /* ---- row ---- */
+    const row=document.createElement('div');
+    row.className=`msg-row ${side}`;
+
+    /* avatar do parceiro (lado esquerdo, mensagens dele) */
+    if (!isMine) {
+      const avatarEl=document.createElement('img');
+      avatarEl.className='msg-sender-avatar'+(sameNext?' hidden':'');
+      avatarEl.src=partnerAv;
+      avatarEl.alt='';
+      row.appendChild(avatarEl);
+    }
+
+    /* coluna: bubble + timestamp — usa a classe CSS .msg-col */
+    const col=document.createElement('div');
+    col.className='msg-col';
+
+    const bubble=document.createElement('div');
+    bubble.className='msg-bubble';
+    bubble.textContent=msg.text;
+    col.appendChild(bubble);
+
+    if (!sameNext) {
+      const timeEl=document.createElement('div');
+      timeEl.className='msg-time-tooltip';
+      timeEl.textContent=formatFullTime(msg.createdAt);
+      col.appendChild(timeEl);
+    }
+
+    row.appendChild(col);
+    container.appendChild(row);
+  });
+
+  if (scrollToBottom) {
+    setTimeout(()=>{ container.scrollTop=container.scrollHeight; },50);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ENVIAR MENSAGEM — com sanitização
+// ══════════════════════════════════════════════════════
+async function sendMessage() {
+  if (!currentUser || !activeConvUser) return;
+  const input = document.getElementById('chatInput');
+  const text  = sanitize(input.value.trim());
+  if (!text) return;
+  const btn = document.getElementById('chatSendBtn');
+  input.disabled = true; btn.disabled = true;
+  const tempMsg = { id:'temp_'+Date.now(), senderId: currentUser.id, receiverId: activeConvUser.id, text, createdAt: new Date().toISOString() };
+  if (!conversations[activeConvUser.id]) conversations[activeConvUser.id] = [];
+  conversations[activeConvUser.id].push(tempMsg);
+  renderMessages(conversations[activeConvUser.id], true);
+  input.value = '';
+  try {
+    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action:'sendMessage', senderId: currentUser.id, receiverId: activeConvUser.id, text }) });
+    const data = await res.json();
+    if (!data.success) {
+      showToast(data.message || 'Erro ao enviar.','#f4212e');
+      conversations[activeConvUser.id] = conversations[activeConvUser.id].filter(m => m.id !== tempMsg.id);
+      renderMessages(conversations[activeConvUser.id], false);
+    } else {
+      await fetchMessages(activeConvUser.id, false, true);
+      renderConvList();
+    }
+  } catch(e) {
+    showToast('Erro de conexão.','#f4212e');
+    conversations[activeConvUser.id] = conversations[activeConvUser.id].filter(m => m.id !== tempMsg.id);
+    renderMessages(conversations[activeConvUser.id], false);
+  } finally { input.disabled = false; btn.disabled = false; input.focus(); }
+}
+
+async function pollMessages() {
+  if (!currentUser||!mutualFollows.length) return;
+  for (const user of mutualFollows) {
+    await fetchMessages(user.id, user.id===activeConvUser?.id, true);
+  }
+  renderConvList();
+  if (currentSection !== 'notifications') checkNotifsBadge();
+}
+
+function startMsgInterval() { stopMsgInterval(); msgInterval=setInterval(pollMessages,8000); }
+function stopMsgInterval()  { if(msgInterval){clearInterval(msgInterval);msgInterval=null;} }
+
+checkLogin();
+
+const backBtn = document.querySelector('.chat-header-back');
+if (backBtn) backBtn.style.display = 'flex';
+
+window.addEventListener('resize',()=>{
+  if (!isMobile()) {
+    if (activeConvUser) {
+      document.getElementById('convList').style.display = 'none';
+      document.getElementById('chatArea').style.flex = '1';
+    } else {
+      document.getElementById('convList').style.display = '';
+      document.getElementById('chatArea').style.flex = '';
+    }
+    document.getElementById('convList').classList.remove('hidden-mobile');
+  }
+});
+</script>
+</body>
+</html>
