@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plataforma Escolar Segura</title>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<title>Plataforma Escolar Institucional</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-    --primary:#0D2B52;
-    --primary-light:#123C70;
-    --secondary:#C8A96B;
-    --background:#F4F7FB;
+
+    --primary:#0A2342;
+    --primary-light:#12355B;
+    --secondary:#C9A227;
+    --background:#F4F6F9;
     --card:#FFFFFF;
-    --text:#1B1F24;
+    --text:#1F2937;
     --text-light:#6B7280;
     --border:#E5E7EB;
     --success:#1E8449;
+    --warning:#D68910;
     --danger:#C0392B;
-    --shadow:0 8px 30px rgba(0,0,0,0.08);
+    --shadow:0 10px 30px rgba(0,0,0,0.08);
     --radius:18px;
 }
 
@@ -38,400 +42,497 @@ body{
     font-family:'Inter',sans-serif;
     background:var(--background);
     color:var(--text);
-    min-height:100vh;
+}
+
+.menu-button{
+
+    position:fixed;
+    top:20px;
+    left:20px;
+
+    width:54px;
+    height:54px;
+
+    border:none;
+    border-radius:16px;
+
+    background:var(--primary);
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+
+    cursor:pointer;
+
+    z-index:999;
+}
+
+.menu-button span{
+
+    width:24px;
+    height:3px;
+    background:white;
+    border-radius:999px;
 }
 
 .sidebar{
-    width:260px;
-    background:linear-gradient(180deg,var(--primary),#081C36);
+
     position:fixed;
+
     top:0;
+    left:-290px;
+
+    width:270px;
+    height:100vh;
+
+    background:linear-gradient(180deg,#0A2342,#08192E);
+
+    padding:30px;
+
+    transition:0.3s;
+
+    z-index:998;
+}
+
+.sidebar.open{
     left:0;
-    bottom:0;
-    padding:30px 22px;
-    color:white;
 }
 
 .logo{
+
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
+
     margin-bottom:40px;
 }
 
-.logo-square{
-    width:42px;
-    height:42px;
-    border-radius:12px;
+.logo-box{
+
+    width:48px;
+    height:48px;
+
+    border-radius:14px;
+
     background:var(--secondary);
 }
 
 .logo h1{
+
+    color:white;
+
     font-size:18px;
-    font-weight:700;
     line-height:1.3;
 }
 
 .menu{
+
     display:flex;
     flex-direction:column;
     gap:12px;
 }
 
 .menu button{
+
     background:rgba(255,255,255,0.08);
-    border:none;
+
     color:white;
+
+    border:none;
+
     padding:14px;
+
     border-radius:14px;
+
     text-align:left;
+
     cursor:pointer;
+
     transition:0.2s;
+
     font-size:15px;
     font-weight:500;
 }
 
 .menu button:hover{
+
     background:rgba(255,255,255,0.16);
 }
 
 .main{
-    margin-left:260px;
+
     padding:32px;
+    padding-top:90px;
 }
 
 .topbar{
+
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     margin-bottom:30px;
 }
 
-.title h2{
-    font-size:28px;
-    font-weight:700;
+.topbar h2{
+
+    color:var(--primary);
+
+    font-size:30px;
 }
 
-.title p{
+.topbar p{
+
     color:var(--text-light);
+
     margin-top:6px;
 }
 
-.user-box{
+.profile{
+
     background:white;
+
     padding:12px 18px;
+
     border-radius:14px;
+
     box-shadow:var(--shadow);
+
     display:flex;
     align-items:center;
     gap:12px;
 }
 
-.user-avatar{
+.profile-circle{
+
     width:42px;
     height:42px;
+
     border-radius:50%;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
 }
 
 .grid{
+
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(240px,1fr));
+
     gap:22px;
+
     margin-bottom:28px;
 }
 
 .card{
-    background:var(--card);
+
+    background:white;
+
     border-radius:var(--radius);
+
     padding:24px;
+
     box-shadow:var(--shadow);
 }
 
 .stat-card{
+
     position:relative;
+
     overflow:hidden;
 }
 
 .stat-card::before{
+
     content:'';
+
     position:absolute;
-    top:0;
+
     left:0;
+    top:0;
+
     width:6px;
     height:100%;
+
     background:var(--secondary);
 }
 
 .stat-title{
-    font-size:14px;
+
     color:var(--text-light);
+
+    font-size:14px;
+
     margin-bottom:10px;
 }
 
-.stat-value{
-    font-size:34px;
-    font-weight:700;
+.stat-number{
+
     color:var(--primary);
+
+    font-size:36px;
+    font-weight:700;
 }
 
 .section-title{
+
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     margin-bottom:20px;
 }
 
 .section-title h3{
+
     font-size:22px;
 }
 
 button{
-    border:none;
-    cursor:pointer;
-    transition:0.2s;
+
     font-family:'Inter',sans-serif;
 }
 
 .primary-btn{
+
     background:var(--primary);
+
     color:white;
-    padding:13px 20px;
+
+    border:none;
+
+    padding:13px 18px;
+
     border-radius:12px;
+
     font-weight:600;
+
+    cursor:pointer;
 }
 
 .primary-btn:hover{
+
     background:var(--primary-light);
 }
 
 .secondary-btn{
-    background:var(--secondary);
-    color:white;
-    padding:13px 20px;
-    border-radius:12px;
-    font-weight:600;
-}
 
-.logout-btn{
-    background:var(--danger);
+    background:var(--secondary);
+
     color:white;
-    padding:13px 20px;
+
+    border:none;
+
+    padding:13px 18px;
+
     border-radius:12px;
+
     font-weight:600;
+
+    cursor:pointer;
 }
 
 .form-grid{
+
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
     gap:18px;
 }
 
 .input-group{
+
     display:flex;
     flex-direction:column;
 }
 
 .input-group label{
+
     font-size:14px;
+
     font-weight:600;
+
     margin-bottom:8px;
+
     color:var(--text-light);
 }
 
-.input-group input,
 .input-group select{
+
     padding:14px;
+
     border-radius:12px;
+
     border:1px solid var(--border);
+
     background:#FAFBFC;
+
     font-size:15px;
+
     outline:none;
 }
 
-.input-group input:focus,
 .input-group select:focus{
+
     border-color:var(--primary);
 }
 
 .table-wrapper{
+
     overflow:auto;
 }
 
 table{
+
     width:100%;
+
     border-collapse:collapse;
 }
 
 table thead{
+
     background:#F8FAFC;
 }
 
 table th,
 table td{
+
     padding:16px;
+
     text-align:left;
+
     border-bottom:1px solid var(--border);
+
     font-size:14px;
 }
 
 table th{
+
     color:var(--text-light);
+
     font-weight:600;
 }
 
 .status{
+
     display:inline-flex;
+
     align-items:center;
+
     gap:8px;
+
     padding:8px 12px;
+
     border-radius:999px;
+
     font-size:13px;
     font-weight:600;
 }
 
 .status::before{
+
     content:'';
+
     width:10px;
     height:10px;
+
     border-radius:50%;
 }
 
-.status.active{
+.active{
+
     background:#E8F8EF;
+
     color:#1E8449;
 }
 
-.status.active::before{
+.active::before{
+
     background:#1E8449;
 }
 
-.status.review{
+.review{
+
     background:#FFF4E5;
+
     color:#D68910;
 }
 
-.status.review::before{
+.review::before{
+
     background:#D68910;
-}
-
-.login-screen{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.login-card{
-    width:100%;
-    max-width:430px;
-    background:white;
-    border-radius:26px;
-    padding:40px;
-    box-shadow:var(--shadow);
-}
-
-.login-header{
-    text-align:center;
-    margin-bottom:28px;
-}
-
-.login-symbol{
-    width:70px;
-    height:70px;
-    border-radius:20px;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    margin:auto;
-    margin-bottom:18px;
-}
-
-.login-header h1{
-    font-size:28px;
-    color:var(--primary);
-}
-
-.login-header p{
-    color:var(--text-light);
-    margin-top:10px;
-    line-height:1.5;
-}
-
-.hidden{
-    display:none;
 }
 
 @media(max-width:900px){
 
-    .sidebar{
-        position:relative;
-        width:100%;
-        height:auto;
-    }
-
-    .main{
-        margin-left:0;
-    }
-
     .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:16px;
-    }
 
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:18px;
+    }
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- ========================================== -->
+<!-- COLE A URL DO DEPLOY DO APPS SCRIPT AQUI -->
+<!-- ========================================== -->
 
-<div class="login-screen" id="loginScreen">
+<script>
 
-<div class="login-card">
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxPemXNAIcAc-a1G2Kx7Py-66qxD0uzsIFwLyf5u8jOc3q2u4SqYiyPdmwEY-AioAqLnA/exec";
 
-<div class="login-header">
+</script>
 
-<div class="login-symbol"></div>
+<button class="menu-button" onclick="toggleMenu()">
 
-<h1>Plataforma Escolar</h1>
+<span></span>
+<span></span>
+<span></span>
 
-<p>
-Sistema seguro de acompanhamento educacional.
-</p>
+</button>
 
-</div>
-
-<div id="g_id_onload"
-data-client_id="SEU_GOOGLE_CLIENT_ID"
-data-callback="handleCredentialResponse">
-</div>
-
-<div class="g_id_signin"></div>
-
-</div>
-
-</div>
-
-<!-- SISTEMA -->
-
-<div id="system" class="hidden">
-
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
 
 <div class="logo">
-<div class="logo-square"></div>
-<h1>Rede Escolar<br>Educacional</h1>
+
+<div class="logo-box"></div>
+
+<h1>
+Plataforma Escolar
+</h1>
+
 </div>
 
 <div class="menu">
+
 <button>Dashboard</button>
+
 <button>Registros</button>
+
 <button>Turmas</button>
+
 <button>Usuários</button>
-<button onclick="logout()">Encerrar Sessão</button>
+
+<button>Relatórios</button>
+
 </div>
 
 </div>
@@ -440,145 +541,256 @@ data-callback="handleCredentialResponse">
 
 <div class="topbar">
 
-<div class="title">
-<h2>Dashboard Administrativo</h2>
-<p>Painel de acompanhamento institucional</p>
-</div>
-
-<div class="user-box">
-<div class="user-avatar"></div>
 <div>
-<b>Usuário Master</b><br>
-<small>Administrador do sistema</small>
+
+<h2>
+Dashboard Institucional
+</h2>
+
+<p>
+Sistema institucional de acompanhamento educacional
+</p>
+
 </div>
+
+<div class="profile">
+
+<div class="profile-circle"></div>
+
+<div>
+
+<b>
+Conta Master
+</b>
+
+<br>
+
+<small>
+Administrador institucional
+</small>
+
 </div>
 
 </div>
+
+</div>
+
+<!-- ESTATÍSTICAS -->
 
 <div class="grid">
 
 <div class="card stat-card">
-<div class="stat-title">Total de Registros</div>
-<div class="stat-value">248</div>
+
+<div class="stat-title">
+Total de Registros
+</div>
+
+<div class="stat-number" id="totalRegistros">
+0
+</div>
+
 </div>
 
 <div class="card stat-card">
-<div class="stat-title">Turmas Ativas</div>
-<div class="stat-value">32</div>
+
+<div class="stat-title">
+Turmas Ativas
+</div>
+
+<div class="stat-number" id="totalTurmas">
+0
+</div>
+
 </div>
 
 <div class="card stat-card">
-<div class="stat-title">Usuários</div>
-<div class="stat-value">18</div>
+
+<div class="stat-title">
+Usuários
+</div>
+
+<div class="stat-number" id="totalUsuarios">
+0
 </div>
 
 </div>
+
+</div>
+
+<!-- CADASTRO -->
 
 <div class="card">
 
 <div class="section-title">
-<h3>Novo Registro</h3>
-<button class="primary-btn">Salvar Registro</button>
+
+<h3>
+Novo Registro
+</h3>
+
+<button class="primary-btn" onclick="createRecord()">
+Salvar Registro
+</button>
+
 </div>
 
 <div class="form-grid">
 
 <div class="input-group">
+
 <label>Segmento</label>
-<select>
-<option>Fundamental</option>
-<option>Médio</option>
+
+<select id="segmento">
+
+<option>Fundamental I</option>
+
+<option>Fundamental II</option>
+
+<option>Ensino Médio</option>
+
 <option>High School</option>
+
 </select>
+
 </div>
 
 <div class="input-group">
+
 <label>Série</label>
-<input type="text" placeholder="Ex: 7º Ano">
+
+<select id="serie">
+
+<option>1º Ano</option>
+<option>2º Ano</option>
+<option>3º Ano</option>
+<option>4º Ano</option>
+<option>5º Ano</option>
+<option>6º Ano</option>
+<option>7º Ano</option>
+<option>8º Ano</option>
+<option>9º Ano</option>
+
+</select>
+
 </div>
 
 <div class="input-group">
+
 <label>Turma</label>
-<input type="text" placeholder="Ex: Turma A">
+
+<select id="turma">
+
+<option>Turma A</option>
+
+<option>Turma B</option>
+
+<option>Turma C</option>
+
+</select>
+
 </div>
 
 <div class="input-group">
+
 <label>Categoria</label>
-<select>
+
+<select id="categoria">
+
 <option>Atenção</option>
+
 <option>Comunicação</option>
+
 <option>Aprendizagem</option>
+
 <option>Mobilidade</option>
+
+<option>Comportamento</option>
+
+<option>Altas habilidades</option>
+
+<option>Outro</option>
+
 </select>
+
 </div>
 
 <div class="input-group">
+
 <label>Nível</label>
-<select>
+
+<select id="nivel">
+
 <option>Baixo</option>
+
 <option>Médio</option>
+
 <option>Alto</option>
+
 </select>
+
 </div>
 
 <div class="input-group">
+
 <label>Status</label>
-<select>
+
+<select id="status">
+
 <option>Ativo</option>
+
 <option>Em análise</option>
+
 <option>Revisar</option>
+
+<option>Encerrado</option>
+
 </select>
-</div>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- REGISTROS -->
 
 <div class="card">
 
 <div class="section-title">
-<h3>Registros Recentes</h3>
-<button class="secondary-btn">Atualizar Dados</button>
+
+<h3>
+Registros Recentes
+</h3>
+
+<button class="secondary-btn" onclick="loadDashboard()">
+Atualizar Dados
+</button>
+
 </div>
 
 <div class="table-wrapper">
 
 <table>
+
 <thead>
+
 <tr>
+
 <th>ID</th>
 <th>Segmento</th>
 <th>Série</th>
 <th>Turma</th>
 <th>Categoria</th>
+<th>Nível</th>
 <th>Status</th>
+
 </tr>
+
 </thead>
 
-<tbody>
-<tr>
-<td>REG-001</td>
-<td>Fundamental</td>
-<td>7º Ano</td>
-<td>A</td>
-<td>Aprendizagem</td>
-<td>
-<span class="status active">Ativo</span>
-</td>
-</tr>
-
-<tr>
-<td>REG-002</td>
-<td>Médio</td>
-<td>2º Ano</td>
-<td>B</td>
-<td>Comunicação</td>
-<td>
-<span class="status review">Revisar</span>
-</td>
-</tr>
+<tbody id="recordsTable">
 
 </tbody>
+
 </table>
 
 </div>
@@ -587,32 +799,167 @@ data-callback="handleCredentialResponse">
 
 </div>
 
-</div>
 <script>
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxPemXNAIcAc-a1G2Kx7Py-66qxD0uzsIFwLyf5u8jOc3q2u4SqYiyPdmwEY-AioAqLnA/exec";
-
-</script>
-<script>
-
-function handleCredentialResponse(response){
+function toggleMenu(){
 
     document
-    .getElementById('loginScreen')
-    .classList.add('hidden');
+    .getElementById("sidebar")
+    .classList.toggle("open");
+}
+
+function sanitize(text){
+
+    if(!text) return "";
+
+    return text
+    .replace(/[<>"'`;()]/g,"")
+    .trim();
+}
+
+async function loadDashboard(){
+
+    try{
+
+        const response = await fetch(API_URL,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"text/plain;charset=utf-8"
+            },
+
+            body:JSON.stringify({
+                action:"dashboard"
+            })
+
+        });
+
+        const data = await response.json();
+
+        document
+        .getElementById("totalRegistros")
+        .innerText = data.totalRegistros || 0;
+
+        document
+        .getElementById("totalTurmas")
+        .innerText = data.totalTurmas || 0;
+
+        document
+        .getElementById("totalUsuarios")
+        .innerText = data.totalUsuarios || 0;
+
+        renderTable(data.records || []);
+
+    }catch(error){
+
+        console.log(error);
+
+        alert("Erro ao carregar dashboard");
+    }
+}
+
+function renderTable(records){
+
+    let html = "";
+
+    records.forEach(record=>{
+
+        html += `
+
+        <tr>
+
+        <td>${record.id}</td>
+
+        <td>${record.segmento}</td>
+
+        <td>${record.serie}</td>
+
+        <td>${record.turma}</td>
+
+        <td>${record.categoria}</td>
+
+        <td>${record.nivel}</td>
+
+        <td>
+        <span class="status active">
+        ${record.status}
+        </span>
+        </td>
+
+        </tr>
+
+        `;
+    });
 
     document
-    .getElementById('system')
-    .classList.remove('hidden');
+    .getElementById("recordsTable")
+    .innerHTML = html;
 }
 
-function logout(){
+async function createRecord(){
 
-    location.reload();
+    const body = {
+
+        action:"createRecord",
+
+        segmento:sanitize(
+            document.getElementById("segmento").value
+        ),
+
+        serie:sanitize(
+            document.getElementById("serie").value
+        ),
+
+        turma:sanitize(
+            document.getElementById("turma").value
+        ),
+
+        categoria:sanitize(
+            document.getElementById("categoria").value
+        ),
+
+        nivel:sanitize(
+            document.getElementById("nivel").value
+        ),
+
+        status:sanitize(
+            document.getElementById("status").value
+        )
+    };
+
+    try{
+
+        const response = await fetch(API_URL,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"text/plain;charset=utf-8"
+            },
+
+            body:JSON.stringify(body)
+
+        });
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        loadDashboard();
+
+    }catch(error){
+
+        console.log(error);
+
+        alert("Erro ao criar registro");
+    }
 }
+
+loadDashboard();
 
 </script>
 
 </body>
+
 </html>
