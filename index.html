@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Plataforma Escolar Segura</title>
 
-<!-- GOOGLE AUTH -->
-<!-- COLE SEU GOOGLE AUTH CLIENT ID ABAIXO -->
-<meta name="google-signin-client_id" content="COLE_AQUI_SEU_GOOGLE_CLIENT_ID">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
     --primary:#0D2B52;
-    --primary-light:#17457D;
+    --primary-light:#123C70;
     --secondary:#C8A96B;
     --background:#F4F7FB;
     --card:#FFFFFF;
@@ -28,9 +23,8 @@
     --text-light:#6B7280;
     --border:#E5E7EB;
     --success:#1E8449;
-    --warning:#D68910;
     --danger:#C0392B;
-    --shadow:0 10px 30px rgba(0,0,0,0.08);
+    --shadow:0 8px 30px rgba(0,0,0,0.08);
     --radius:18px;
 }
 
@@ -44,16 +38,17 @@ body{
     font-family:'Inter',sans-serif;
     background:var(--background);
     color:var(--text);
+    min-height:100vh;
 }
 
 .sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
     width:260px;
-    background:linear-gradient(180deg,#0D2B52,#081C36);
-    padding:28px;
+    background:linear-gradient(180deg,var(--primary),#081C36);
+    position:fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    padding:30px 22px;
     color:white;
 }
 
@@ -64,15 +59,16 @@ body{
     margin-bottom:40px;
 }
 
-.logo-shape{
-    width:46px;
-    height:46px;
-    border-radius:14px;
+.logo-square{
+    width:42px;
+    height:42px;
+    border-radius:12px;
     background:var(--secondary);
 }
 
 .logo h1{
     font-size:18px;
+    font-weight:700;
     line-height:1.3;
 }
 
@@ -96,7 +92,7 @@ body{
 }
 
 .menu button:hover{
-    background:rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.16);
 }
 
 .main{
@@ -111,17 +107,17 @@ body{
     margin-bottom:30px;
 }
 
-.topbar h2{
-    font-size:30px;
-    color:var(--primary);
+.title h2{
+    font-size:28px;
+    font-weight:700;
 }
 
-.topbar p{
+.title p{
     color:var(--text-light);
     margin-top:6px;
 }
 
-.profile{
+.user-box{
     background:white;
     padding:12px 18px;
     border-radius:14px;
@@ -131,7 +127,7 @@ body{
     gap:12px;
 }
 
-.profile-circle{
+.user-avatar{
     width:42px;
     height:42px;
     border-radius:50%;
@@ -146,7 +142,7 @@ body{
 }
 
 .card{
-    background:white;
+    background:var(--card);
     border-radius:var(--radius);
     padding:24px;
     box-shadow:var(--shadow);
@@ -160,8 +156,8 @@ body{
 .stat-card::before{
     content:'';
     position:absolute;
-    left:0;
     top:0;
+    left:0;
     width:6px;
     height:100%;
     background:var(--secondary);
@@ -173,8 +169,8 @@ body{
     margin-bottom:10px;
 }
 
-.stat-number{
-    font-size:36px;
+.stat-value{
+    font-size:34px;
     font-weight:700;
     color:var(--primary);
 }
@@ -200,7 +196,7 @@ button{
 .primary-btn{
     background:var(--primary);
     color:white;
-    padding:13px 18px;
+    padding:13px 20px;
     border-radius:12px;
     font-weight:600;
 }
@@ -212,7 +208,15 @@ button{
 .secondary-btn{
     background:var(--secondary);
     color:white;
-    padding:13px 18px;
+    padding:13px 20px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.logout-btn{
+    background:var(--danger);
+    color:white;
+    padding:13px 20px;
     border-radius:12px;
     font-weight:600;
 }
@@ -293,22 +297,68 @@ table th{
     border-radius:50%;
 }
 
-.active{
+.status.active{
     background:#E8F8EF;
     color:#1E8449;
 }
 
-.active::before{
+.status.active::before{
     background:#1E8449;
 }
 
-.review{
+.status.review{
     background:#FFF4E5;
     color:#D68910;
 }
 
-.review::before{
+.status.review::before{
     background:#D68910;
+}
+
+.login-screen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-card{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:26px;
+    padding:40px;
+    box-shadow:var(--shadow);
+}
+
+.login-header{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.login-symbol{
+    width:70px;
+    height:70px;
+    border-radius:20px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    margin:auto;
+    margin-bottom:18px;
+}
+
+.login-header h1{
+    font-size:28px;
+    color:var(--primary);
+}
+
+.login-header p{
+    color:var(--text-light);
+    margin-top:10px;
+    line-height:1.5;
+}
+
+.hidden{
+    display:none;
 }
 
 @media(max-width:900px){
@@ -326,49 +376,62 @@ table th{
     .topbar{
         flex-direction:column;
         align-items:flex-start;
-        gap:18px;
+        gap:16px;
     }
 
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- ====================================== -->
-<!-- COLE SUA URL DO APPS SCRIPT AQUI -->
-<!-- ====================================== -->
+<!-- LOGIN -->
 
-<script>
+<div class="login-screen" id="loginScreen">
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxPemXNAIcAc-a1G2Kx7Py-66qxD0uzsIFwLyf5u8jOc3q2u4SqYiyPdmwEY-AioAqLnA/exec";
+<div class="login-card">
 
-</script>
+<div class="login-header">
+
+<div class="login-symbol"></div>
+
+<h1>Plataforma Escolar</h1>
+
+<p>
+Sistema seguro de acompanhamento educacional.
+</p>
+
+</div>
+
+<div id="g_id_onload"
+data-client_id="SEU_GOOGLE_CLIENT_ID"
+data-callback="handleCredentialResponse">
+</div>
+
+<div class="g_id_signin"></div>
+
+</div>
+
+</div>
+
+<!-- SISTEMA -->
+
+<div id="system" class="hidden">
 
 <div class="sidebar">
 
 <div class="logo">
-<div class="logo-shape"></div>
-
-<h1>
-Plataforma Escolar
-</h1>
+<div class="logo-square"></div>
+<h1>Rede Escolar<br>Educacional</h1>
 </div>
 
 <div class="menu">
-
 <button>Dashboard</button>
-
 <button>Registros</button>
-
 <button>Turmas</button>
-
 <button>Usuários</button>
-
-<button>Relatórios</button>
-
+<button onclick="logout()">Encerrar Sessão</button>
 </div>
 
 </div>
@@ -377,222 +440,145 @@ Plataforma Escolar
 
 <div class="topbar">
 
+<div class="title">
+<h2>Dashboard Administrativo</h2>
+<p>Painel de acompanhamento institucional</p>
+</div>
+
+<div class="user-box">
+<div class="user-avatar"></div>
 <div>
-
-<h2>Dashboard Institucional</h2>
-
-<p>
-Sistema seguro de acompanhamento educacional
-</p>
-
+<b>Usuário Master</b><br>
+<small>Administrador do sistema</small>
 </div>
-
-<div class="profile">
-
-<div class="profile-circle"></div>
-
-<div>
-
-<b>Administrador</b><br>
-
-<small>Sistema Institucional</small>
-
 </div>
 
 </div>
-
-</div>
-
-<!-- ESTATÍSTICAS -->
 
 <div class="grid">
 
 <div class="card stat-card">
-
-<div class="stat-title">
-Total de Registros
-</div>
-
-<div class="stat-number" id="totalRegistros">
-0
-</div>
-
+<div class="stat-title">Total de Registros</div>
+<div class="stat-value">248</div>
 </div>
 
 <div class="card stat-card">
-
-<div class="stat-title">
-Turmas Ativas
-</div>
-
-<div class="stat-number" id="totalTurmas">
-0
-</div>
-
+<div class="stat-title">Turmas Ativas</div>
+<div class="stat-value">32</div>
 </div>
 
 <div class="card stat-card">
-
-<div class="stat-title">
-Usuários
-</div>
-
-<div class="stat-number" id="totalUsuarios">
-0
+<div class="stat-title">Usuários</div>
+<div class="stat-value">18</div>
 </div>
 
 </div>
-
-</div>
-
-<!-- NOVO REGISTRO -->
 
 <div class="card">
 
 <div class="section-title">
-
 <h3>Novo Registro</h3>
-
-<button class="primary-btn" onclick="createRecord()">
-Salvar Registro
-</button>
-
+<button class="primary-btn">Salvar Registro</button>
 </div>
 
 <div class="form-grid">
 
 <div class="input-group">
-
 <label>Segmento</label>
-
-<select id="segmento">
-
+<select>
 <option>Fundamental</option>
-
 <option>Médio</option>
-
 <option>High School</option>
-
 </select>
-
 </div>
 
 <div class="input-group">
-
 <label>Série</label>
-
-<input type="text" id="serie" placeholder="Ex: 7º Ano">
-
+<input type="text" placeholder="Ex: 7º Ano">
 </div>
 
 <div class="input-group">
-
 <label>Turma</label>
-
-<input type="text" id="turma" placeholder="Ex: A">
-
+<input type="text" placeholder="Ex: Turma A">
 </div>
 
 <div class="input-group">
-
 <label>Categoria</label>
-
-<select id="categoria">
-
+<select>
 <option>Atenção</option>
-
 <option>Comunicação</option>
-
 <option>Aprendizagem</option>
-
 <option>Mobilidade</option>
-
-<option>Comportamento</option>
-
-<option>Altas habilidades</option>
-
-<option>Outro</option>
-
 </select>
-
 </div>
 
 <div class="input-group">
-
 <label>Nível</label>
-
-<select id="nivel">
-
+<select>
 <option>Baixo</option>
-
 <option>Médio</option>
-
 <option>Alto</option>
-
 </select>
-
 </div>
 
 <div class="input-group">
-
 <label>Status</label>
-
-<select id="status">
-
+<select>
 <option>Ativo</option>
-
 <option>Em análise</option>
-
 <option>Revisar</option>
-
-<option>Encerrado</option>
-
 </select>
-
 </div>
 
 </div>
 
 </div>
-
-<!-- REGISTROS -->
 
 <div class="card">
 
 <div class="section-title">
-
 <h3>Registros Recentes</h3>
-
-<button class="secondary-btn" onclick="loadDashboard()">
-Atualizar Dados
-</button>
-
+<button class="secondary-btn">Atualizar Dados</button>
 </div>
 
 <div class="table-wrapper">
 
 <table>
-
 <thead>
-
 <tr>
-
 <th>ID</th>
 <th>Segmento</th>
 <th>Série</th>
 <th>Turma</th>
 <th>Categoria</th>
-<th>Nível</th>
 <th>Status</th>
-
 </tr>
-
 </thead>
 
-<tbody id="recordsTable">
+<tbody>
+<tr>
+<td>REG-001</td>
+<td>Fundamental</td>
+<td>7º Ano</td>
+<td>A</td>
+<td>Aprendizagem</td>
+<td>
+<span class="status active">Ativo</span>
+</td>
+</tr>
+
+<tr>
+<td>REG-002</td>
+<td>Médio</td>
+<td>2º Ano</td>
+<td>B</td>
+<td>Comunicação</td>
+<td>
+<span class="status review">Revisar</span>
+</td>
+</tr>
 
 </tbody>
-
 </table>
 
 </div>
@@ -601,145 +587,30 @@ Atualizar Dados
 
 </div>
 
+</div>
 <script>
 
-function sanitize(text){
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxPemXNAIcAc-a1G2Kx7Py-66qxD0uzsIFwLyf5u8jOc3q2u4SqYiyPdmwEY-AioAqLnA/exec";
 
-    if(!text) return "";
+</script>
+<script>
 
-    return text
-    .replace(/[<>"'`;()]/g,"")
-    .trim();
+function handleCredentialResponse(response){
+
+    document
+    .getElementById('loginScreen')
+    .classList.add('hidden');
+
+    document
+    .getElementById('system')
+    .classList.remove('hidden');
 }
 
-async function loadDashboard(){
+function logout(){
 
-    try{
-
-        const response = await fetch(API_URL,{
-
-            method:"POST",
-
-            body:JSON.stringify({
-                action:"dashboard"
-            })
-
-        });
-
-        const data = await response.json();
-
-        document.getElementById("totalRegistros")
-        .innerText = data.totalRegistros || 0;
-
-        document.getElementById("totalTurmas")
-        .innerText = data.totalTurmas || 0;
-
-        document.getElementById("totalUsuarios")
-        .innerText = data.totalUsuarios || 0;
-
-        renderTable(data.records || []);
-
-    }catch(error){
-
-        console.log(error);
-
-        alert("Erro ao carregar dashboard");
-    }
+    location.reload();
 }
-
-function renderTable(records){
-
-    let html = "";
-
-    records.forEach(record=>{
-
-        html += `
-
-        <tr>
-
-        <td>${record.id}</td>
-
-        <td>${record.segmento}</td>
-
-        <td>${record.serie}</td>
-
-        <td>${record.turma}</td>
-
-        <td>${record.categoria}</td>
-
-        <td>${record.nivel}</td>
-
-        <td>
-        <span class="status active">
-        ${record.status}
-        </span>
-        </td>
-
-        </tr>
-
-        `;
-    });
-
-    document.getElementById("recordsTable")
-    .innerHTML = html;
-}
-
-async function createRecord(){
-
-    const body = {
-
-        action:"createRecord",
-
-        segmento:sanitize(
-            document.getElementById("segmento").value
-        ),
-
-        serie:sanitize(
-            document.getElementById("serie").value
-        ),
-
-        turma:sanitize(
-            document.getElementById("turma").value
-        ),
-
-        categoria:sanitize(
-            document.getElementById("categoria").value
-        ),
-
-        nivel:sanitize(
-            document.getElementById("nivel").value
-        ),
-
-        status:sanitize(
-            document.getElementById("status").value
-        )
-    };
-
-    try{
-
-        const response = await fetch(API_URL,{
-
-            method:"POST",
-
-            body:JSON.stringify(body)
-
-        });
-
-        const data = await response.json();
-
-        alert(data.message);
-
-        loadDashboard();
-
-    }catch(error){
-
-        console.log(error);
-
-        alert("Erro ao criar registro");
-    }
-}
-
-loadDashboard();
 
 </script>
 
